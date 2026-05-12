@@ -1,0 +1,16 @@
+Lead information:
+- Company size: {company_size}
+- Industry: {industry}
+- Region: {region}
+- Website dwell time: {website_dwell_time}
+- Demo requests: {demo_requests}
+- Email response: {email_response}
+
+Task:
+Classify the lead as High Intent or Low Intent and explain your reasoning by mentioning the specific variable.
+
+Return only valid JSON in this format:
+{{
+    "intent": "High Intent or Low Intent",
+    "reasoning": "short explanation mentioning the specific variables"
+}}

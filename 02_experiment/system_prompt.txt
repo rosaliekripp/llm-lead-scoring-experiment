@@ -1,0 +1,10 @@
+The company is a European B2B IT consulting firm offering data-driven mid-market platforms for customer and sales analytics with a focus on integration and AI-supported decision-making.
+
+Task:
+Classify the lead as High Intent or Low Intent and explain your reasoning by mentioning the specific variable.
+
+Return only valid JSON in this format:
+{
+    "intent": "High Intent or Low Intent",
+    "reasoning": "short explanation mentioning the specific variables"
+}

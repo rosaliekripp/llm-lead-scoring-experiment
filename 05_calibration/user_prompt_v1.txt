@@ -1,0 +1,7 @@
+Lead information:
+- Company size: {company_size}
+- Industry: {industry}
+- Region: {region}
+- Website dwell time: {website_dwell_time}
+- Demo requests: {demo_requests}
+- Email response: {email_response}
