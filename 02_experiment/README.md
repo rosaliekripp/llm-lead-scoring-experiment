@@ -1,4 +1,4 @@
 # experiment
-Data Generation Process
-Prompt Setup
-LLM Configuration
+- Data Generation Process
+- Prompt Setup
+- LLM Configuration

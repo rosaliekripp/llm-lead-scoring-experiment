@@ -1,3 +1,3 @@
 # analysis
-Mapping: Scripts → Hypotheses
-Brief description of the methods
+- Mapping: Scripts → Hypotheses
+- Brief description of the methods
