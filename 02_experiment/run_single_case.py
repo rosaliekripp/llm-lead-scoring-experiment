@@ -5,6 +5,7 @@ import re
 import time
 import random
 import pandas as pd
+import logging
 from pathlib import Path
 from openai import OpenAI
 
@@ -12,6 +13,22 @@ from openai import OpenAI
 load_dotenv()
 api_key = os.getenv("API_KEY")
 base_url = os.getenv("BASE_URL")
+
+BASE_DIR = Path(__file__).parent
+
+# Logging setup
+log_dir = BASE_DIR / "logs"
+log_filename =  log_dir / "test_run.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.FileHandler(log_filename, encoding="utf-8", mode="a"),
+        logging.StreamHandler(),          # keeps console output
+    ],
+)
+log = logging.getLogger()
 
 # Test settings
 model      = "qwen3.6-35b-a3b"      # Select model
@@ -27,9 +44,9 @@ client = OpenAI(
 )
 
 # Load input data and prompt templates
-df              = pd.read_csv("doe.csv", sep=";")
-user_prompt     = Path("user_prompt.txt").read_text(encoding="utf-8")
-system_prompt   = Path("system_prompt.txt").read_text(encoding="utf-8")
+df              = pd.read_csv(Path("01_data/synthetic/synthetic_lead_profiles_full_factorial_2to6.csv"), sep=";")
+user_prompt     = (BASE_DIR / "user_prompt.txt").read_text(encoding="utf-8")
+system_prompt   = (BASE_DIR / "system_prompt.txt").read_text(encoding="utf-8")
 
 # Define helper functions
 def create_prompt(row):
@@ -73,11 +90,11 @@ def call_with_backoff(model, prompt, max_attempts=4):
             err = str(e)
             if "429" in err or "rate" in err.lower():
                 wait = (2 ** attempt) + random.uniform(0, 1)
-                print(f"  Rate Limit – wait {wait:.1f}s (Attempt {attempt + 1}/{max_attempts})")
+                log.info(f"  Rate Limit – wait {wait:.1f}s (Attempt {attempt + 1}/{max_attempts})")
                 time.sleep(wait)
             elif any(code in err for code in ("500", "502", "503")):
                 wait = 5 * (attempt + 1)
-                print(f"  Server Error – wait {wait}s (Attempt {attempt + 1}/{max_attempts})")
+                log.info(f"  Server Error – wait {wait}s (Attempt {attempt + 1}/{max_attempts})")
                 time.sleep(wait)
             else:
                 raise
@@ -90,19 +107,19 @@ row     = df.iloc[case_index]
 case_id = case_index + 1
 prompt  = create_prompt(row)
 
-print("=" * 60)
-print("Test Case:")
-print(row.to_dict())
-print("\nUser Prompt:")
-print(prompt)
-print("=" * 60)
+log.info("=" * 60)
+log.info("Test Case:")
+log.info(row.to_dict())
+log.info("\nUser Prompt:")
+log.info(prompt)
+log.info("=" * 60)
 
 # Repeated test calls
 results  = []
 latencies = []
 
 for run in range(1, n_runs + 1):
-    print(f"\n--- Run {run}/{n_runs} ---")
+    log.info(f"\n--- Run {run}/{n_runs} ---")
 
     try:
         start         = time.time()
@@ -112,9 +129,9 @@ for run in range(1, n_runs + 1):
 
         parsed = parse_response(response_text)
 
-        print(f"Latency:    {latency}s")
-        print(f"Raw:       {response_text}")
-        print(f"Parsed:    {parsed}")
+        log.info(f"Latency:    {latency}s")
+        log.info(f"Raw:       {response_text}")
+        log.info(f"Parsed:    {parsed}")
 
         results.append({
             "case_id":      case_id,
@@ -129,7 +146,7 @@ for run in range(1, n_runs + 1):
         })
 
     except Exception as e:
-        print(f"Error: {e}")
+        log.info(f"Error: {e}")
 
         results.append({
             "case_id":      case_id,
@@ -145,33 +162,36 @@ for run in range(1, n_runs + 1):
 
 # Save results to CSV
 results_df = pd.DataFrame(results)
-results_df.to_csv("llm_lead_intent_test_results.csv", index=False, encoding="utf-8-sig")
+result_path = BASE_DIR / "results" / "llm_lead_intent_test_results.csv"
+write_header = not result_path.exists()
+results_df.to_csv(result_path, mode="a", index=False, header=write_header, encoding="utf-8-sig")
 
-# Print conclusion
-print("\n" + "=" * 60)
-print("CONCLUSION")
-print("=" * 60)
+# log.info conclusion
+log.info("\n" + "=" * 60)
+log.info("CONCLUSION")
+log.info("=" * 60)
 
-print("\nResults:")
-print(results_df[["run", "intent", "parse_error", "latency_s"]].to_string(index=False))
+log.info("\nResults:")
+log.info(results_df[["run", "intent", "parse_error", "latency_s"]].to_string(index=False))
 
-print("\nIntent Distribution:")
-print(results_df["intent"].value_counts(dropna=False))
+log.info("\nIntent Distribution:")
+log.info(results_df["intent"].value_counts(dropna=False))
 
 # Stability rate: Percentage of the most common response
 if results_df["intent"].notna().any():
     top_intent     = results_df["intent"].mode()[0]
     stability_rate = (results_df["intent"] == top_intent).sum() / n_runs
-    print(f"\nStability Rate: {stability_rate:.0%} "
+    log.info(f"\nStability Rate: {stability_rate:.0%} "
           f"({int(stability_rate * n_runs)}/{n_runs} Runs → '{top_intent}')")
 
 # Latencies
 if latencies:
-    print(f"\nLatency – Ø {sum(latencies)/len(latencies):.2f}s | "
+    log.info(f"\nLatency – Ø {sum(latencies)/len(latencies):.2f}s | "
           f"Min {min(latencies):.2f}s | Max {max(latencies):.2f}s")
 
 parse_errors = results_df["parse_error"].notna().sum()
 if parse_errors:
-    print(f"\n⚠ Parse Error: {parse_errors}/{n_runs}")
+    log.info(f"\n⚠ Parse Error: {parse_errors}/{n_runs}")
 
 print("\nSaved: llm_lead_intent_test_results.csv")
+log.info(f"\nRun finished. Log saved in: {log_filename}")
