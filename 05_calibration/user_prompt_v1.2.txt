@@ -1,0 +1,11 @@
+Lead information
+
+Firmographics:
+- Company size: {company_size}
+- Industry: {industry}
+- Region: {region}
+
+Behavioral Data:
+- Website dwell time: {website_dwell_time}
+- Demo requests: {demo_requests}
+- Email response: {email_response}
