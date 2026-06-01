@@ -8,6 +8,7 @@ import os
 import time
 import statistics
 import logging
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from pathlib import Path
@@ -16,15 +17,32 @@ from openai import OpenAI
 # Configuration
 load_dotenv()
 
-MODEL           = "qwen3.6-35b-a3b"
-CONCURRENCY_LEVELS  = [1, 2, 4, 8, 16]        # parallel workers per stage
+MODEL           = "llama-3.3-70b-instruct"
+CONCURRENCY_LEVELS  = [1, 2, 4]       # parallel workers per stage
 CALLS_PER_LEVEL     = 10                      # calls per concurrency level
 TOTAL_CALLS_TARGET  = 960                     # informational – not enforced here
-SAMPLE_PROMPT        = "Reply with exactly one word: OK"
+SAMPLE_PROMPT = """The company is a European B2B IT consulting firm offering data-driven mid-market platforms for customer and sales analytics with a focus on integration and AI-supported decision-making.
+
+Task:
+Classify the lead as High Intent or Low Intent and explain your reasoning by mentioning the specific variable.
+
+Return only valid JSON in this format:
+{
+    "intent": "High Intent or Low Intent",
+    "reasoning": "short explanation mentioning the specific variables"
+}
+
+Lead data:
+- Company size: 250 employees
+- Industry: Financial Services
+- Region: Europe
+- Website time on site: 8 minutes
+- Demo requests: 2
+- Email response: Yes"""
 
 # Logging setup
 BASE_DIR = Path(__file__).parent
-log_filename =  BASE_DIR / "api_stress_test.log"
+log_filename = BASE_DIR / f"api_stress_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(message)s",
@@ -46,36 +64,41 @@ client = OpenAI(
 
 # Single call
 def single_call(call_id: int) -> dict:
-    start = time.time()
-    try:
-        completion = client.chat.completions.create(
-            model=MODEL,
-            temperature=0,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user",   "content": SAMPLE_PROMPT},
-            ],
-        )
-        latency = round(time.time() - start, 3)
-        return {
-            "call_id":  call_id,
-            "latency":  latency,
-            "status":   "ok",
-            "response": completion.choices[0].message.content.strip(),
-            "error":    None,
-        }
-    except Exception as e:
-        latency = round(time.time() - start, 3)
-        err = str(e)
-        status = "rate_limit" if "429" in err else "server_error" if any(
-            c in err for c in ("500", "502", "503")) else "error"
-        return {
-            "call_id":  call_id,
-            "latency":  latency,
-            "status":   status,
-            "response": None,
-            "error":    err,
-        }
+    for attempt in range(3):   # max 3 Versuche
+        start = time.time()
+        try:
+            completion = client.chat.completions.create(
+                model=MODEL,
+                temperature=0,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user",   "content": SAMPLE_PROMPT},
+                ],
+            )
+            latency = round(time.time() - start, 3)
+            return {
+                "call_id":  call_id,
+                "latency":  latency,
+                "status":   "ok",
+                "response": completion.choices[0].message.content.strip(),
+                "error":    None,
+            }
+        except Exception as e:
+            err = str(e)
+            if any(code in err for code in ("500", "502", "503")) and attempt < 2:
+                log.info(f"  ↻ Call {call_id} – 500 error, retry {attempt + 1}/2 ...")
+                time.sleep(3)
+                continue
+            latency = round(time.time() - start, 3)
+            status = "rate_limit" if "429" in err else "server_error" if any(
+                c in err for c in ("500", "502", "503")) else "error"
+            return {
+                "call_id":  call_id,
+                "latency":  latency,
+                "status":   status,
+                "response": None,
+                "error":    err,
+            }
 
 # Stage runner
 def run_stage(concurrency: int, n_calls: int) -> list[dict]:
@@ -90,8 +113,10 @@ def run_stage(concurrency: int, n_calls: int) -> list[dict]:
             r = future.result()
             icon = "✓" if r["status"] == "ok" else "✗"
             log.info(f"  {icon} Call {r['call_id']:>3} | {r['latency']}s | "
-                     f"{r['status']} | {r['response'] or r['error'][:60]}")
+                    f"{r['status']} | {r['response'] or r['error'][:60]}")
             results.append(r)
+            if r["status"] != "ok":
+                time.sleep(5)   # short break after each error
     return results
 
 # Summary
@@ -138,7 +163,7 @@ def main():
             break
 
         # Brief cooldown between stages
-        time.sleep(2)
+        time.sleep(5)
 
     print_summary(all_results)
 
