@@ -1,0 +1,66 @@
+﻿profile_id;company_size;industry;region;website_dwell_time;demo_requests;email_response
+A_BASE;500;Finance;Europe;4 min;1;"Looks interesting, could you send more info?"
+A_company_size_low;10;Finance;Europe;4 min;1;"Looks interesting, could you send more info?"
+A_company_size_high;10000;Finance;Europe;4 min;1;"Looks interesting, could you send more info?"
+A_industry_non-icp;500;Public Service;Europe;4 min;1;"Looks interesting, could you send more info?"
+A_industry_icp;500;Software / IT;Europe;4 min;1;"Looks interesting, could you send more info?"
+A_region_non-icp;500;Finance;Africa;4 min;1;"Looks interesting, could you send more info?"
+A_region_icp;500;Finance;North America;4 min;1;"Looks interesting, could you send more info?"
+A_website_dwell_time_low;500;Finance;Europe;15 sec;1;"Looks interesting, could you send more info?"
+A_website_dwell_time_high;500;Finance;Europe;10 min;1;"Looks interesting, could you send more info?"
+A_demo_requests_low;500;Finance;Europe;4 min;0;"Looks interesting, could you send more info?"
+A_demo_requests_high;500;Finance;Europe;4 min;3;"Looks interesting, could you send more info?"
+A_email_response_non-icp;500;Finance;Europe;4 min;1;"We’re not interested."
+A_email_response_icp;500;Finance;Europe;4 min;1;"Could we schedule a meeting next week?"
+B_BASE;5000;Manufacturing;North America;40 sec;1;No Response
+B_company_size_low;10;Manufacturing;North America;40 sec;1;No Response
+B_company_size_high;10000;Manufacturing;North America;40 sec;1;No Response
+B_industry_non-icp;5000;Public Service;North America;40 sec;1;No Response
+B_industry_icp;5000;Software / IT;North America;40 sec;1;No Response
+B_region_non-icp;5000;Manufacturing;Africa;40 sec;1;No Response
+B_region_icp;5000;Manufacturing;Europe;40 sec;1;No Response
+B_website_dwell_time_low;5000;Manufacturing;North America;15 sec;1;No Response
+B_website_dwell_time_high;5000;Manufacturing;North America;10 min;1;No Response
+B_demo_requests_low;5000;Manufacturing;North America;40 sec;0;No Response
+B_demo_requests_high;5000;Manufacturing;North America;40 sec;3;No Response
+B_email_response_non-icp;5000;Manufacturing;North America;40 sec;1;"We’re not interested."
+B_email_response_icp;5000;Manufacturing;North America;40 sec;1;"Could we schedule a meeting next week?"
+C_BASE;80;Healthcare;Middle East;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_company_size_low;10;Healthcare;Middle East;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_company_size_high;10000;Healthcare;Middle East;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_industry_non-icp;80;Public Service;Middle East;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_industry_icp;80;Software / IT;Middle East;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_region_non-icp;80;Healthcare;Africa;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_region_icp;80;Healthcare;Europe;7 min;2;"Very promising. We're actively evaluating solutions like this."
+C_website_dwell_time_low;80;Healthcare;Middle East;15 sec;2;"Very promising. We're actively evaluating solutions like this."
+C_website_dwell_time_high;80;Healthcare;Middle East;10 min;2;"Very promising. We're actively evaluating solutions like this."
+C_demo_requests_low;80;Healthcare;Middle East;7 min;0;"Very promising. We're actively evaluating solutions like this."
+C_demo_requests_high;80;Healthcare;Middle East;7 min;3;"Very promising. We're actively evaluating solutions like this."
+C_email_response_non-icp;80;Healthcare;Middle East;7 min;2;"We’re not interested."
+C_email_response_icp;80;Healthcare;Middle East;7 min;2;"Could we schedule a meeting next week?"
+D_BASE;1200;Energy;Asia;2.5 min;2;"This looks relevant to our current initiatives."
+D_company_size_low;10;Energy;Asia;2.5 min;2;"This looks relevant to our current initiatives."
+D_company_size_high;10000;Energy;Asia;2.5 min;2;"This looks relevant to our current initiatives."
+D_industry_non-icp;1200;Public Service;Asia;2.5 min;2;"This looks relevant to our current initiatives."
+D_industry_icp;1200;Software / IT;Asia;2.5 min;2;"This looks relevant to our current initiatives."
+D_region_non-icp;1200;Energy;Africa;2.5 min;2;"This looks relevant to our current initiatives."
+D_region_icp;1200;Energy;Europe;2.5 min;2;"This looks relevant to our current initiatives."
+D_website_dwell_time_low;1200;Energy;Asia;15 sec;2;"This looks relevant to our current initiatives."
+D_website_dwell_time_high;1200;Energy;Asia;10 min;2;"This looks relevant to our current initiatives."
+D_demo_requests_low;1200;Energy;Asia;2.5 min;0;"This looks relevant to our current initiatives."
+D_demo_requests_high;1200;Energy;Asia;2.5 min;3;"This looks relevant to our current initiatives."
+D_email_response_non-icp;1200;Energy;Asia;2.5 min;2;"We’re not interested."
+D_email_response_icp;1200;Energy;Asia;2.5 min;2;"Could we schedule a meeting next week?"
+E_BASE;250;Retail;South America;1 min;1;"Noted - we may revisit this later."
+E_company_size_low;10;Retail;South America;1 min;1;"Noted - we may revisit this later."
+E_company_size_high;10000;Retail;South America;1 min;1;"Noted - we may revisit this later."
+E_industry_non-icp;250;Public Service;South America;1 min;1;"Noted - we may revisit this later."
+E_industry_icp;250;Software / IT;South America;1 min;1;"Noted - we may revisit this later."
+E_region_non-icp;250;Retail;Africa;1 min;1;"Noted - we may revisit this later."
+E_region_icp;250;Retail;Europe;1 min;1;"Noted - we may revisit this later."
+E_website_dwell_time_low;250;Retail;South America;15 sec;1;"Noted - we may revisit this later."
+E_website_dwell_time_high;250;Retail;South America;10 min;1;"Noted - we may revisit this later."
+E_demo_requests_low;250;Retail;South America;1 min;0;"Noted - we may revisit this later."
+E_demo_requests_high;250;Retail;South America;1 min;3;"Noted - we may revisit this later."
+E_email_response_non-icp;250;Retail;South America;1 min;1;"We’re not interested."
+E_email_response_icp;250;Retail;South America;1 min;1;"Could we schedule a meeting next week?"

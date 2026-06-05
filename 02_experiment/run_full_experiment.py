@@ -51,7 +51,7 @@ client = OpenAI(
 )
 
 # Load input data and prompt templates
-df            = pd.read_csv(BASE_DIR / "01_data/synthetic/synthetic_lead_profiles_full_factorial_2to6.csv", sep=";")
+df            = pd.read_csv(BASE_DIR / "01_data/synthetic/synthetic_lead_profiles.csv", sep=";")
 user_prompt   = (BASE_DIR / "user_prompt.txt").read_text(encoding="utf-8")
 system_prompt = (BASE_DIR / "system_prompt.txt").read_text(encoding="utf-8")
 
