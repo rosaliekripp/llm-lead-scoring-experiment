@@ -6,6 +6,7 @@ import time
 import random
 import pandas as pd
 import logging
+from datetime import datetime
 from pathlib import Path
 from openai import OpenAI
 
@@ -18,7 +19,7 @@ BASE_DIR = Path(__file__).parent
 
 # Logging setup
 log_dir = BASE_DIR / "logs"
-log_filename =  log_dir / "test_run.log"
+log_filename =  log_dir / f"test_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(message)s",
@@ -31,7 +32,7 @@ logging.basicConfig(
 log = logging.getLogger()
 
 # Test settings
-model      = "llama-3.3-70b-instruct"      # Select model
+model      = "meta-llama-3.1-8b-instruct"      # Select model
 case_index = 0                      # Select a table row
 n_runs     = 5                      # Select the number of repetitions
 

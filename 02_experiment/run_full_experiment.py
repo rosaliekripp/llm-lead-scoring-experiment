@@ -39,7 +39,7 @@ MAX_WORKERS     = 5
 models = [
     "mistral-large-3-675b-instruct-2512",
     "gemma-4-31b-it",
-    "llama-3.3-70b-instruct",
+    "meta-llama-3.1-8b-instruct",
 ]
 
 # Initialize OpenAI client
