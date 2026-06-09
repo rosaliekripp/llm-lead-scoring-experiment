@@ -31,7 +31,7 @@ logging.basicConfig(
 log = logging.getLogger()
 
 # Test settings
-model      = "qwen3.6-35b-a3b"      # Select model
+model      = "llama-3.3-70b-instruct"      # Select model
 case_index = 0                      # Select a table row
 n_runs     = 5                      # Select the number of repetitions
 

@@ -38,7 +38,7 @@ MAX_WORKERS     = 5
 # Define models for comparison
 models = [
     "mistral-large-3-675b-instruct-2512",
-    "qwen3.5-122b-a10b",
+    "gemma-4-31b-it",
     "llama-3.3-70b-instruct",
 ]
 
