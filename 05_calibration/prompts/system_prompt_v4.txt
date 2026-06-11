@@ -2,12 +2,7 @@ Context:
 A European B2B IT consulting firm offers analytics platforms for sales and customer insights, including AI-supported decision-making.
 
 Task Definition:
-Determine the intent level of a lead.
-
-Decision Rule:
-
-- High Intent: strong engagement or clear buying signals
-- Low Intent: weak or no engagement signals
+Determine the intent level of a lead by evaluating the available data on firmography and engagement. Decide based on comparable customers from comparable companies.
 
 Requirements:
 

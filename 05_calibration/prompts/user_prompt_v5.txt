@@ -1,4 +1,4 @@
-Input:
+Firmographic input:
 
 - Company size: {company_size}
 - Industry: {industry}
@@ -10,4 +10,11 @@ Engagement metrics:
 - Demo requests: {demo_requests}
 - Email response: {email_response}
 
-Perform classification.
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.

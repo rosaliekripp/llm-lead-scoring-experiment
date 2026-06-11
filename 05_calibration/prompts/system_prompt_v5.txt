@@ -13,9 +13,3 @@ Procedure:
 Categories:
 (1) High Intent
 (2) Low Intent
-
-Constraint:
-Return only JSON with:
-
-- intent
-- reasoning (must include at least one variable name)
