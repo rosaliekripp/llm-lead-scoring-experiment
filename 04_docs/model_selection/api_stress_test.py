@@ -17,10 +17,10 @@ from openai import OpenAI
 # Configuration
 load_dotenv()
 
-MODEL           = "meta-llama-3.1-8b-instruct"
-CONCURRENCY_LEVELS  = [1, 2, 4]       # parallel workers per stage
+MODEL               = "mistral-large-3-675b-instruct-2512"
+CONCURRENCY_LEVELS  = [1, 2, 4]               # parallel workers per stage
 CALLS_PER_LEVEL     = 10                      # calls per concurrency level
-TOTAL_CALLS_TARGET  = 960                     # informational – not enforced here
+TOTAL_CALLS_TARGET  = 975                     # informational – not enforced here
 SAMPLE_PROMPT = """The company is a European B2B IT consulting firm offering data-driven mid-market platforms for customer and sales analytics with a focus on integration and AI-supported decision-making.
 
 Task:
