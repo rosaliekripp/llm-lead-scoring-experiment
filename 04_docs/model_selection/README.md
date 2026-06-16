@@ -44,8 +44,8 @@ A model was excluded if it met any of the following conditions:
 
 ¹ Technically eligible, but excluded in favour of higher architectural heterogeneity across the selected set.  
 ² Extreme latency outlier (38.2 s at concurrency 1); unpredictable single-threaded performance.  
-³ Zero errors in run 3, but maximum latencies of 17.3 s and 24.5 s at concurrency levels 1 and 4 indicate unacceptable latency variability for a 975-call experiment. Runs 1–2 additionally confirmed error instability on June 15.  
-⁴ Average latency 7–8 s across all stages; p95 exceeding 10 s under moderate concurrency.
+³ Zero errors in run 3, but maximum latencies of 17.3 s and 24.5 s at concurrency levels 1 and 4 indicate unacceptable latency variability for a 975-call experiment. Runs 1-2 additionally confirmed error instability on June 15.  
+⁴ Average latency 7-8 s across all stages; p95 exceeding 10 s under moderate concurrency.
 
 ## Selected Models
 

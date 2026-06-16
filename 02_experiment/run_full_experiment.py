@@ -37,9 +37,9 @@ MAX_WORKERS     = 5
 
 # Define models for comparison
 models = [
-    "mistral-large-3-675b-instruct-2512",
-    "gemma-4-31b-it",
     "meta-llama-3.1-8b-instruct",
+    "apertus-70b-instruct-2509",
+    "openai-gpt-oss-120b",
 ]
 
 # Initialize OpenAI client

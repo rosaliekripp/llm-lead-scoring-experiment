@@ -1,7 +1,20 @@
-Lead information:
+Firmographic input:
+
 - Company size: {company_size}
 - Industry: {industry}
 - Region: {region}
+
+Engagement metrics:
+
 - Website dwell time: {website_dwell_time}
 - Demo requests: {demo_requests}
 - Email response: {email_response}
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.

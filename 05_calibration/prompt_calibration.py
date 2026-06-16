@@ -33,7 +33,7 @@ logging.basicConfig(
 log = logging.getLogger()
 
 # Test settings
-model         = "mistral-large-3-675b-instruct-2512"
+model         = "meta-llama-3.1-8b-instruct"
 n_runs        = 5
 VALID_INTENTS = {"High Intent", "Low Intent"}
 
