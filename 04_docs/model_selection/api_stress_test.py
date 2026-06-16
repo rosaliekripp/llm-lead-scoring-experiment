@@ -42,7 +42,9 @@ Lead data:
 
 # Logging setup
 BASE_DIR = Path(__file__).parent
-log_filename = BASE_DIR / f"api_stress_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_dir = BASE_DIR / "logs"
+log_dir.mkdir(exist_ok=True)
+log_filename = log_dir / f"api_stress_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(message)s",
