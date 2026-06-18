@@ -1,5 +1,5 @@
 """
-API Stress Test
+API Screening Test
 Measures throughput, latency, and error behaviour under load.
 Ramp up concurrency until errors appear or a target rate is reached.
 """
@@ -44,7 +44,7 @@ Lead data:
 BASE_DIR = Path(__file__).parent
 log_dir = BASE_DIR / "logs"
 log_dir.mkdir(exist_ok=True)
-log_filename = log_dir / f"api_stress_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_filename = log_dir / f"api_screening_test_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(message)s",
@@ -124,7 +124,7 @@ def run_stage(concurrency: int, n_calls: int) -> list[dict]:
 # Summary
 def print_summary(all_results: list[dict]):
     log.info(f"\n{'='*50}")
-    log.info("STRESS TEST SUMMARY")
+    log.info("SCREENING TEST SUMMARY")
     log.info(f"{'='*50}")
     log.info(f"{'Concurrency':<14} {'Calls':>6} {'OK':>6} {'Errors':>8} "
              f"{'Avg(s)':>8} {'p95(s)':>8} {'Max(s)':>8}")
@@ -149,7 +149,7 @@ def print_summary(all_results: list[dict]):
 # Main
 def main():
     log.info("=" * 50)
-    log.info(f"API Stress Test – Model: {MODEL}")
+    log.info(f"API Screening Test – Model: {MODEL}")
     log.info(f"Planned full run: {TOTAL_CALLS_TARGET} calls")
     log.info("=" * 50)
 
