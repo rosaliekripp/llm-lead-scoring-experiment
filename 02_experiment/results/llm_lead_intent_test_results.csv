@@ -1,181 +1,116 @@
 ﻿case_id,run,model,prompt,raw_response,intent,reasoning,parse_error,latency_s
-1,1,llama-3.3-70b-instruct,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.""
-}
-```",High Intent,"The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.",,1.69
-1,2,llama-3.3-70b-instruct,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.""
-}
-```",High Intent,"The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.",,1.5
-1,3,llama-3.3-70b-instruct,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.""
-}
-```",High Intent,"The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.",,1.54
-1,4,llama-3.3-70b-instruct,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.""
-}
-```",High Intent,"The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.",,1.44
-1,5,llama-3.3-70b-instruct,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.""
-}
-```",High Intent,"The lead's email response indicates interest in the product, specifically requesting a meeting, which suggests a high level of intent to engage with the company's services.",,1.53
-1,1,mistral-large-3-675b-instruct-2512,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```json
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead demonstrated high intent through the email response variable, which indicates direct interest in scheduling a meeting.""
-}
-```",High Intent,"The lead demonstrated high intent through the email response variable, which indicates direct interest in scheduling a meeting.",,11.54
-1,2,mistral-large-3-675b-instruct-2512,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```json
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead demonstrated high intent through the 'Email response' variable, which shows direct interest in scheduling a meeting.""
-}
-```",High Intent,"The lead demonstrated high intent through the 'Email response' variable, which shows direct interest in scheduling a meeting.",,1.05
-1,3,mistral-large-3-675b-instruct-2512,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```json
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead demonstrated high intent based on the 'Email response' variable, which indicates direct interest in scheduling a meeting.""
-}
-```",High Intent,"The lead demonstrated high intent based on the 'Email response' variable, which indicates direct interest in scheduling a meeting.",,0.67
-1,4,mistral-large-3-675b-instruct-2512,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```json
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead demonstrated high intent based on the 'Email response' variable, which shows proactive interest in scheduling a meeting.""
-}
-```",High Intent,"The lead demonstrated high intent based on the 'Email response' variable, which shows proactive interest in scheduling a meeting.",,0.6
-1,5,mistral-large-3-675b-instruct-2512,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","```json
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The lead demonstrated high intent based on the 'Email response' variable, which shows direct interest in scheduling a meeting.""
-}
-```",High Intent,"The lead demonstrated high intent based on the 'Email response' variable, which shows direct interest in scheduling a meeting.",,1.11
-1,1,qwen3.6-35b-a3b,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
-- Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","
+1,1,meta-llama-3.1-8b-instruct,"Firmographic input:
 
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.""
-}",High Intent,"High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.",,8.83
-1,2,qwen3.6-35b-a3b,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
+- Company size: 500
+- Industry: Finance
 - Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","
 
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.""
-}",High Intent,"High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.",,9.95
-1,3,qwen3.6-35b-a3b,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
+Engagement metrics:
+
+- Website dwell time: 4 min
+- Demo requests: 1
+- Email response: Looks interesting, could you send more info?
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.","{
+  ""intent"": ""High Intent"",
+  ""reasoning"": ""Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.""
+}",High Intent,"Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.",,1.01
+1,2,meta-llama-3.1-8b-instruct,"Firmographic input:
+
+- Company size: 500
+- Industry: Finance
 - Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","
 
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""The explicit email response requesting to schedule a meeting is a direct buying signal that outweighs the low website engagement metrics (30-second dwell time and 0 demo clicks).""
-}",High Intent,The explicit email response requesting to schedule a meeting is a direct buying signal that outweighs the low website engagement metrics (30-second dwell time and 0 demo clicks).,,7.27
-1,4,qwen3.6-35b-a3b,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
+Engagement metrics:
+
+- Website dwell time: 4 min
+- Demo requests: 1
+- Email response: Looks interesting, could you send more info?
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.","{
+  ""intent"": ""High Intent"",
+  ""reasoning"": ""Company size (500) and industry (Finance) indicate a medium to large organization with potential for significant investment, while website dwell time (4 min) and email response ('Looks interesting') suggest engagement and interest in the product.""
+}",High Intent,"Company size (500) and industry (Finance) indicate a medium to large organization with potential for significant investment, while website dwell time (4 min) and email response ('Looks interesting') suggest engagement and interest in the product.",,0.5
+1,3,meta-llama-3.1-8b-instruct,"Firmographic input:
+
+- Company size: 500
+- Industry: Finance
 - Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","
 
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.""
-}",High Intent,"High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.",,8.73
-1,5,qwen3.6-35b-a3b,"Lead information:
-- Company size: 5000 employees (Enterprise)
-- Industry: Software / IT
+Engagement metrics:
+
+- Website dwell time: 4 min
+- Demo requests: 1
+- Email response: Looks interesting, could you send more info?
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.","{
+  ""intent"": ""High Intent"",
+  ""reasoning"": ""Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.""
+}",High Intent,"Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.",,0.61
+1,4,meta-llama-3.1-8b-instruct,"Firmographic input:
+
+- Company size: 500
+- Industry: Finance
 - Region: Europe
-- Website dwell time: 30 seconds
-- Demo requests: 0 clicks
-- Email response: „This looks relevant. Could we schedule a meeting next week?“","
 
-{
-    ""intent"": ""High Intent"",
-    ""reasoning"": ""High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.""
-}",High Intent,"High Intent, primarily driven by the explicit email response requesting a meeting next week, which strongly signals active purchase interest despite low website dwell time and demo request metrics.",,8.59
+Engagement metrics:
+
+- Website dwell time: 4 min
+- Demo requests: 1
+- Email response: Looks interesting, could you send more info?
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.","{
+  ""intent"": ""High Intent"",
+  ""reasoning"": ""Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.""
+}",High Intent,"Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.",,0.62
+1,5,meta-llama-3.1-8b-instruct,"Firmographic input:
+
+- Company size: 500
+- Industry: Finance
+- Region: Europe
+
+Engagement metrics:
+
+- Website dwell time: 4 min
+- Demo requests: 1
+- Email response: Looks interesting, could you send more info?
+
+Perform High/Low Intent classification.
+
+Return ONLY JSON with:
+
+- intent
+- reasoning (short, must include at least one variable name)
+
+No preamble, no explanation outside the JSON.","{
+  ""intent"": ""High Intent"",
+  ""reasoning"": ""Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.""
+}",High Intent,"Company size (500) and industry (Finance) indicate a medium to large organization with potential for data analytics and AI integration. Website dwell time (4 min) suggests engagement, and the email response ('Looks interesting, could you send more info') indicates a level of interest, while the single demo request may not be a strong enough signal to classify as Low Intent.",,0.72
