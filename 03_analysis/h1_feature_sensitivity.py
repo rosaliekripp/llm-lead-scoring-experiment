@@ -30,7 +30,6 @@ class Tee:
 
 _log_file = open(log_path, "w", encoding="utf-8")
 sys.stdout = Tee(sys.stdout, _log_file)
-print(f"Logging to {log_path}")
 
 # map intent classes to binary score
 score_map = {"Low Intent": 0, "High Intent": 1}

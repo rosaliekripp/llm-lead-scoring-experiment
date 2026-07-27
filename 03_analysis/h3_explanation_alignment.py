@@ -45,7 +45,7 @@ FEATURE_TERMS = {
 
 # ---------- load coded explanations ----------
 coding = pd.read_csv(base_dir / "post_processing" / "llm_lead_intent_results_explanations_coded.csv")
-coding["aligned"] = (coding["final_code"] > 0).astype(int)
+coding["aligned"] = (coding["final_code"] > 2).astype(int)
 
 low_text = coding["reasoning"].astype(str).str.lower()
 for f, terms in FEATURE_TERMS.items():
