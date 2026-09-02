@@ -17,7 +17,7 @@ from openai import OpenAI
 # Configuration
 load_dotenv()
 
-MODEL               = "meta-llama-3.1-8b-instruct"
+MODEL               = "meta-llama-3.1-8b-instruct"  # change model for screening test
 CONCURRENCY_LEVELS  = [1, 2, 4]               # parallel workers per stage
 CALLS_PER_LEVEL     = 10                      # calls per concurrency level
 TOTAL_CALLS_TARGET  = 975                     # informational – not enforced here
@@ -66,7 +66,7 @@ client = OpenAI(
 
 # Single call
 def single_call(call_id: int) -> dict:
-    for attempt in range(3):   # max 3 Versuche
+    for attempt in range(3):   # max 3 tries
         start = time.time()
         try:
             completion = client.chat.completions.create(
