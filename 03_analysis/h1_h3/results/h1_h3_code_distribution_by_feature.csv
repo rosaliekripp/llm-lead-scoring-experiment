@@ -1,0 +1,25 @@
+feature,final_code,count,feature_type,feature_label,share_within_feature
+company_size,0,47,Firmographic,Company size,0.31333333333333335
+company_size,1,14,Firmographic,Company size,0.09333333333333334
+company_size,2,27,Firmographic,Company size,0.18
+company_size,3,62,Firmographic,Company size,0.41333333333333333
+industry,0,96,Firmographic,Industry,0.64
+industry,1,5,Firmographic,Industry,0.03333333333333333
+industry,2,3,Firmographic,Industry,0.02
+industry,3,46,Firmographic,Industry,0.30666666666666664
+region,0,148,Firmographic,Region,0.9866666666666667
+region,1,2,Firmographic,Region,0.013333333333333334
+region,2,0,Firmographic,Region,0.0
+region,3,0,Firmographic,Region,0.0
+website_dwell_time,0,45,Behavioral,Website dwell time,0.3
+website_dwell_time,1,2,Behavioral,Website dwell time,0.013333333333333334
+website_dwell_time,2,14,Behavioral,Website dwell time,0.09333333333333334
+website_dwell_time,3,89,Behavioral,Website dwell time,0.5933333333333334
+demo_requests,0,26,Behavioral,Demo requests,0.17333333333333334
+demo_requests,1,6,Behavioral,Demo requests,0.04
+demo_requests,2,9,Behavioral,Demo requests,0.06
+demo_requests,3,109,Behavioral,Demo requests,0.7266666666666667
+email_response,0,0,Behavioral,Email response,0.0
+email_response,1,2,Behavioral,Email response,0.013333333333333334
+email_response,2,2,Behavioral,Email response,0.013333333333333334
+email_response,3,146,Behavioral,Email response,0.9733333333333334

@@ -1,0 +1,3 @@
+analysis,term,log_odds,robust_se,odds_ratio,ci_low,ci_high,p_value,n_observations,n_clusters,note
+"Primary GEE, exchangeable correlation",Behavioral vs firmographic,2.665647388755279,0.6219591066857628,14.377254206510564,4.248676572135206,48.651723662444894,1.8201025741894596e-05,450,30,GEE robust Wald inference for the single prespecified H1 contrast
+Supplementary baseline-anchored GEE; eligible cases,Behavioral vs firmographic,2.3571741946193754,0.5690477645045742,10.561065730337605,3.461979641548651,32.217436527332616,3.4382003930196924e-05,450,30,GEE robust Wald inference for the single prespecified H1 contrast

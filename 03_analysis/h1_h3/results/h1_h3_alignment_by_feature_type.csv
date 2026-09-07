@@ -1,0 +1,3 @@
+feature_type,n_cases,n_explanations,n_code3,mean_alignment_share,bootstrap_95ci_low,bootstrap_95ci_high,n_complete_alignment_5_of_5,complete_alignment_rate
+Firmographic,90,450,108,0.24000000000000002,0.15777777777777777,0.32449999999999923,18,0.2
+Behavioral,90,450,344,0.7644444444444444,0.6844444444444444,0.8400000000000001,62,0.6888888888888889

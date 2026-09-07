@@ -1,0 +1,13 @@
+outcome,feature_type,feature,n_units,n_unstable,instability_rate
+Score,Behavioral,demo_requests,30,2,0.06666666666666667
+Score,Behavioral,website_dwell_time,30,2,0.06666666666666667
+Score,Behavioral,email_response,30,1,0.03333333333333333
+Score,Firmographic,region,30,4,0.13333333333333333
+Score,Firmographic,company_size,30,2,0.06666666666666667
+Score,Firmographic,industry,30,1,0.03333333333333333
+Explanation,Behavioral,demo_requests,30,8,0.26666666666666666
+Explanation,Behavioral,website_dwell_time,30,6,0.2
+Explanation,Behavioral,email_response,30,2,0.06666666666666667
+Explanation,Firmographic,industry,30,5,0.16666666666666666
+Explanation,Firmographic,company_size,30,4,0.13333333333333333
+Explanation,Firmographic,region,30,2,0.06666666666666667

@@ -199,7 +199,11 @@ def run_alignment_test(threshold, label):
     H_c, p_kw = kruskal(*groups_c)
     logger.info("H4c omnibus (Kruskal-Wallis on per-profile alignment rate, "
                 ">= %d): H=%.3f, p=%.4g", threshold, H_c, p_kw)
-    register(label, p_kw)
+    if label.endswith("sensitivity_ge1"):
+        logger.info("SENSITIVITY p-value [%s] raw p = %.4g "
+                    "(reported separately, NOT part of the Holm/FDR family)", label, p_kw)
+    else:
+        register(label, p_kw)
 
 # primary (>=3) and sensitivity (>=1)
 run_alignment_test(3, "H4c_alignment_between_models_primary_ge3")

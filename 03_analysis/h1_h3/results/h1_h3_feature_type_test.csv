@@ -1,0 +1,2 @@
+comparison,n_paired_profile_model_strata,mean_paired_difference,paired_bootstrap_95ci_low,paired_bootstrap_95ci_high,test,n_permutations,p_value,alpha,reject_equal_alignment_null
+Behavioral minus firmographic,15,0.5244444444444445,0.3555555555555555,0.6844444444444445,Two-sided exact sign-flip permutation test,32768,0.00018310546875,0.05,True

@@ -1,0 +1,39 @@
+feature_type,successes,total,rate,ci_low,ci_high,ci_type,analysis,model,adjusted_probability,adjusted_risk_difference_behavioral_minus_firmographic,feature,delta,count,share_within_feature
+behavioral,127.0,225.0,0.5644444444444444,0.49911241456486505,0.6276128744166327,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate,,,,,,,
+firmographic,13.0,225.0,0.057777777777777775,0.03407307016362626,0.09632925717023341,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate,,,,,,,
+behavioral,33.0,75.0,0.44,0.33331457491249156,0.5525322861854451,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,apertus-70b-instruct-2509,,,,,,
+firmographic,0.0,75.0,0.0,0.0,0.04872384248280589,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,apertus-70b-instruct-2509,,,,,,
+behavioral,43.0,75.0,0.5733333333333334,0.46052792329276937,0.6789925798097526,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,meta-llama-3.1-8b-instruct,,,,,,
+firmographic,8.0,75.0,0.10666666666666667,0.05504912762174319,0.1966136284647308,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,meta-llama-3.1-8b-instruct,,,,,,
+behavioral,51.0,75.0,0.68,0.5678893670539183,0.7745700496522717,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,openai-gpt-oss-120b,,,,,,
+firmographic,5.0,75.0,0.06666666666666667,0.02881006289949372,0.1467506005856047,Wilson descriptive; does not adjust for clustering,Raw descriptive sensitivity rate by model,openai-gpt-oss-120b,,,,,,
+firmographic,,,,,,,Primary model-standardized probabilities,,0.08875791265838368,0.4747668847624617,,,,
+behavioral,,,,,,,Primary model-standardized probabilities,,0.5635247974208454,0.4747668847624617,,,,
+behavioral,130.0,225.0,0.5777777777777777,0.5124659533421185,0.6404783609458959,Wilson descriptive; does not adjust for clustering,Baseline-anchored change rate; eligible cases,,,,,,,
+firmographic,18.0,225.0,0.08,0.05120069857616922,0.1229000042685518,Wilson descriptive; does not adjust for clustering,Baseline-anchored change rate; eligible cases,,,,,,,
+behavioral,39.0,39.0,1.0,0.9103331462924285,0.9999999999999998,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,demo_requests,,,
+behavioral,73.0,73.0,1.0,0.9500079920442687,0.9999999999999999,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,email_response,,,
+behavioral,18.0,21.0,0.8571428571428571,0.6536393971937904,0.9501898750027473,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,website_dwell_time,,,
+firmographic,3.0,8.0,0.375,0.13684428582359737,0.6942576053973728,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,company_size,,,
+firmographic,8.0,12.0,0.6666666666666666,0.3906220888727995,0.8618799089087869,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,industry,,,
+firmographic,7.0,13.0,0.5384615384615384,0.29143795714506004,0.7679393219046169,Wilson descriptive; does not adjust for clustering,Directional consistency among baseline changes,,,,region,,,
+behavioral,73.0,75.0,0.9733333333333334,0.9078851181224086,0.9926563109938686,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,email_response,,,
+behavioral,39.0,75.0,0.52,0.4087421577281785,0.6293088885725093,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,demo_requests,,,
+behavioral,15.0,75.0,0.2,0.12512147714196709,0.30411282834771647,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,website_dwell_time,,,
+firmographic,6.0,75.0,0.08,0.037180124350333854,0.1637479033352231,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,industry,,,
+firmographic,5.0,75.0,0.06666666666666667,0.02881006289949372,0.1467506005856047,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,region,,,
+firmographic,2.0,75.0,0.02666666666666667,0.0073436890061313875,0.09211488187759152,Wilson descriptive; does not adjust for clustering,Exploratory feature-level sensitivity,,,,company_size,,,
+behavioral,,,,,,,Signed Low-High delta distribution,,,,demo_requests,0.0,36.0,0.48
+behavioral,,,,,,,Signed Low-High delta distribution,,,,demo_requests,1.0,39.0,0.52
+behavioral,,,,,,,Signed Low-High delta distribution,,,,email_response,0.0,2.0,0.02666666666666667
+behavioral,,,,,,,Signed Low-High delta distribution,,,,email_response,1.0,73.0,0.9733333333333334
+behavioral,,,,,,,Signed Low-High delta distribution,,,,website_dwell_time,0.0,60.0,0.8
+behavioral,,,,,,,Signed Low-High delta distribution,,,,website_dwell_time,1.0,15.0,0.2
+firmographic,,,,,,,Signed Low-High delta distribution,,,,company_size,-1.0,2.0,0.02666666666666667
+firmographic,,,,,,,Signed Low-High delta distribution,,,,company_size,0.0,73.0,0.9733333333333334
+firmographic,,,,,,,Signed Low-High delta distribution,,,,industry,-1.0,1.0,0.013333333333333334
+firmographic,,,,,,,Signed Low-High delta distribution,,,,industry,0.0,69.0,0.92
+firmographic,,,,,,,Signed Low-High delta distribution,,,,industry,1.0,5.0,0.06666666666666667
+firmographic,,,,,,,Signed Low-High delta distribution,,,,region,-1.0,2.0,0.02666666666666667
+firmographic,,,,,,,Signed Low-High delta distribution,,,,region,0.0,70.0,0.9333333333333333
+firmographic,,,,,,,Signed Low-High delta distribution,,,,region,1.0,3.0,0.04

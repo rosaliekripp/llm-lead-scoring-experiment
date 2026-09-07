@@ -1,0 +1,7 @@
+feature,n_cases,n_explanations,n_code3,mean_alignment_share,bootstrap_95ci_low,bootstrap_95ci_high,n_complete_alignment_5_of_5,complete_alignment_rate,feature_type,feature_label
+company_size,30,150,62,0.41333333333333333,0.24666666666666667,0.58,11,0.36666666666666664,Firmographic,Company size
+industry,30,150,46,0.30666666666666664,0.16,0.4666666666666666,7,0.23333333333333334,Firmographic,Industry
+region,30,150,0,0.0,0.0,0.0,0,0.0,Firmographic,Region
+website_dwell_time,30,150,89,0.5933333333333333,0.4333333333333333,0.7466666666666666,15,0.5,Behavioral,Website dwell time
+demo_requests,30,150,109,0.7266666666666667,0.58,0.86,19,0.6333333333333333,Behavioral,Demo requests
+email_response,30,150,146,0.9733333333333333,0.9333333333333333,1.0,28,0.9333333333333333,Behavioral,Email response

@@ -1,0 +1,7 @@
+term,log_odds,robust_se,odds_ratio,or_ci_low,or_ci_high,p_value,n_observations,n_clusters
+Intercept,-35.22287265646612,,5.045460012129755e-16,,,,450,30
+C(model)[T.meta-llama-3.1-8b-instruct],33.09762159138014,,236654311589134.03,,,,450,30
+C(model)[T.openai-gpt-oss-120b],32.583815342474594,,141569990393009.16,,,,450,30
+fe_behavioral,34.98171059964924,,1557269869992745.2,,,,450,30
+fe_behavioral:C(model)[T.meta-llama-3.1-8b-instruct],-32.560995321669424,,7.226689686078739e-15,,,,450,30
+fe_behavioral:C(model)[T.openai-gpt-oss-120b],-31.588881483281327,,1.910394602018003e-14,,,,450,30
