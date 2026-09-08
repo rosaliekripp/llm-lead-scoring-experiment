@@ -1,0 +1,7 @@
+model,feature_type,successes,total,rate,ci_low,ci_high,ci_type
+apertus-70b-instruct-2509,behavioral,105,150,0.7,0.6224201960400859,0.7675917062126834,Wilson descriptive; does not adjust for clustering
+apertus-70b-instruct-2509,firmographic,54,150,0.36,0.2875658325044363,0.4394258359186251,Wilson descriptive; does not adjust for clustering
+meta-llama-3.1-8b-instruct,behavioral,113,150,0.7533333333333333,0.6785967057397265,0.8154183704471146,Wilson descriptive; does not adjust for clustering
+meta-llama-3.1-8b-instruct,firmographic,52,150,0.3466666666666667,0.2751950896082086,0.4257957853313349,Wilson descriptive; does not adjust for clustering
+openai-gpt-oss-120b,behavioral,126,150,0.84,0.7729603179581628,0.890059915871545,Wilson descriptive; does not adjust for clustering
+openai-gpt-oss-120b,firmographic,2,150,0.013333333333333334,0.003664129151227047,0.04730690870036752,Wilson descriptive; does not adjust for clustering

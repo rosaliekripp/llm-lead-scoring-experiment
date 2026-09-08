@@ -34,13 +34,12 @@ import pandas as pd
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "post_processing"
-ANALYSIS_DIR = BASE_DIR / "h1_h3"
-FIGURES_DIR = ANALYSIS_DIR / "figures"
-LOGS_DIR = ANALYSIS_DIR / "logs"
-RESULTS_DIR = ANALYSIS_DIR / "results"
+DATA_DIR = BASE_DIR.parent / "post_processing"
+RESULTS_DIR = BASE_DIR / "results"
+FIGURES_DIR = BASE_DIR / "figures"
+LOG_DIR = BASE_DIR / "logs"
 
-for directory in (FIGURES_DIR, LOGS_DIR, RESULTS_DIR):
+for directory in (RESULTS_DIR, FIGURES_DIR, LOG_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
 CODED_FILE = DATA_DIR / "llm_lead_intent_results_explanations_coded.csv"
@@ -103,7 +102,7 @@ logger.setLevel(logging.INFO)
 logger.handlers.clear()
 
 file_handler = logging.FileHandler(
-    LOGS_DIR / "h1_h3_feature_alignment.log", mode="w", encoding="utf-8"
+    LOG_DIR / "h1_h3_feature_alignment.log", mode="w", encoding="utf-8"
 )
 stream_handler = logging.StreamHandler()
 for handler in (file_handler, stream_handler):

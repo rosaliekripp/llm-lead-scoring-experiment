@@ -25,11 +25,14 @@ from scipy.stats import fisher_exact
 # Configuration
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "post_processing"
+DATA_DIR = BASE_DIR.parent / "post_processing"
 SCORE_FILE = DATA_DIR / "llm_lead_intent_results_clean.csv"
 EXPLANATION_FILE = DATA_DIR / "llm_lead_intent_results_explanations_coded.csv"
-OUTPUT_DIR = BASE_DIR / "h1_h2_feature_stability_outputs"
-OUTPUT_DIR.mkdir(exist_ok=True)
+RESULTS_DIR = BASE_DIR / "results"
+FIGURES_DIR = BASE_DIR / "figures"
+LOG_DIR = BASE_DIR / "logs"
+for directory in (RESULTS_DIR, FIGURES_DIR, LOG_DIR):
+    directory.mkdir(parents=True, exist_ok=True)
 
 # Column containing identifiers such as A_demo_requests_high.
 CONDITION_COLUMN = "profile_id"
@@ -50,7 +53,7 @@ logger.setLevel(logging.INFO)
 logger.handlers.clear()
 for handler in (
     logging.FileHandler(
-        OUTPUT_DIR / "h1_h2_feature_stability.log", mode="w", encoding="utf-8"
+        LOG_DIR / "h1_h2_feature_stability.log", mode="w", encoding="utf-8"
     ),
     logging.StreamHandler(),
 ):
@@ -254,7 +257,7 @@ def create_figure(group_summary):
     ax.legend(title="Outcome")
     fig.tight_layout()
     fig.savefig(
-        OUTPUT_DIR / "h1_h2_instability_by_feature_type.png", dpi=300
+        FIGURES_DIR / "h1_h2_instability_by_feature_type.png", dpi=300
     )
     plt.close(fig)
 
@@ -286,20 +289,19 @@ def main():
     all_groups = pd.concat([score_group, explanation_group], ignore_index=True)
     all_features = pd.concat([score_feature, explanation_feature], ignore_index=True)
 
-    all_units.to_csv(OUTPUT_DIR / "h1_h2_stability_units.csv", index=False)
-    all_groups.to_csv(OUTPUT_DIR / "h1_h2_feature_type_summary.csv", index=False)
+    all_units.to_csv(RESULTS_DIR / "h1_h2_stability_units.csv", index=False)
+    all_groups.to_csv(RESULTS_DIR /  "h1_h2_feature_type_summary.csv", index=False)
     all_features.to_csv(
-        OUTPUT_DIR / "h1_h2_individual_feature_summary.csv", index=False
+        RESULTS_DIR /  "h1_h2_individual_feature_summary.csv", index=False
     )
 
-    score_table.to_csv(OUTPUT_DIR / "h1_h2_score_contingency.csv")
+    score_table.to_csv(RESULTS_DIR /  "h1_h2_score_contingency.csv", index=False)
     explanation_table.to_csv(
-        OUTPUT_DIR / "h1_h2_explanation_contingency.csv"
+        RESULTS_DIR /  "h1_h2_explanation_contingency.csv", index=False
     )
 
     create_figure(all_groups)
     log("Note: Both Fisher tests are exploratory and unadjusted.")
-    log(f"Results saved to: {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+analysis,wald_chi_square,degrees_of_freedom,p_value,interaction_terms,n_observations,n_clusters,regularized_covariance,note
+Score sensitivity: Feature Type x Model interaction,-0.1538046490397932,2,1.0,fe_behavioral:C(model)[T.meta-llama-3.1-8b-instruct] | fe_behavioral:C(model)[T.openai-gpt-oss-120b],450,30,False,Joint robust Wald test of Feature Type x Model interaction coefficients
+Explanation alignment: Feature Type x Model interaction,19.667462659840872,2,5.3612337994037294e-05,fe_behavioral:C(model)[T.meta-llama-3.1-8b-instruct] | fe_behavioral:C(model)[T.openai-gpt-oss-120b],900,60,False,Joint robust Wald test of Feature Type x Model interaction coefficients
+Explanation length: Feature Type x Model interaction,3.618301891364474,2,0.16379314705945455,fe_behavioral:C(model)[T.meta-llama-3.1-8b-instruct] | fe_behavioral:C(model)[T.openai-gpt-oss-120b],900,60,False,Joint robust Wald test of Feature Type x Model interaction coefficients

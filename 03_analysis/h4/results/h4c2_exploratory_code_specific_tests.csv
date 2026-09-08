@@ -1,0 +1,5 @@
+analysis,test,statistic,df,p_value,p_holm_across_codes
+H4c2_exploratory_code_0,Approximate joint Wald test (VB diagonal covariance),21.214160856460083,2,2.4740216791876945e-05,4.948043358375389e-05
+H4c2_exploratory_code_1,Approximate joint Wald test (VB diagonal covariance),15.60503405148061,2,0.0004087049623240079,0.0004087049623240079
+H4c2_exploratory_code_2,Approximate joint Wald test (VB diagonal covariance),154.21472614785,2,3.2560997644966153e-34,1.3024399057986461e-33
+H4c2_exploratory_code_3,Approximate joint Wald test (VB diagonal covariance),32.1374739146376,2,1.0505971256692772e-07,3.1517913770078317e-07

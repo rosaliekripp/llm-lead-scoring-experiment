@@ -1,0 +1,6 @@
+analysis,test,statistic,df,p_value,n_matched_profiles
+H4a1_overall_score,Approximate joint Wald test (VB diagonal covariance),215.25501078079822,2,1.8112079173055764e-47,
+H4a2_perturbation_sensitivity,Approximate joint Wald test (VB diagonal covariance),45.314122716085976,2,1.4459832961371364e-10,
+H4b1_score_stability,Friedman test on matched profile-level MAR,5.285714285714785,2,0.07115767120806417,65.0
+H4b2_explanation_stability,Friedman test on matched profile-level MAR,4.465753424657584,2,0.1072195462731489,60.0
+H4c1_explanation_alignment,Approximate joint Wald test (VB diagonal covariance),32.137464474362204,2,1.05060208464408e-07,

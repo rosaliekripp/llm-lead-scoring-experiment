@@ -1,0 +1,16 @@
+base_profile,model,high_intent_rate,high_intent_n,n_runs,mar,modal_count
+A,apertus-70b-instruct-2509,1.0,5,5,1.0,5
+A,meta-llama-3.1-8b-instruct,1.0,5,5,1.0,5
+A,openai-gpt-oss-120b,1.0,5,5,1.0,5
+B,apertus-70b-instruct-2509,0.0,0,5,1.0,5
+B,meta-llama-3.1-8b-instruct,0.0,0,5,1.0,5
+B,openai-gpt-oss-120b,0.8,4,5,0.8,4
+C,apertus-70b-instruct-2509,1.0,5,5,1.0,5
+C,meta-llama-3.1-8b-instruct,1.0,5,5,1.0,5
+C,openai-gpt-oss-120b,1.0,5,5,1.0,5
+D,apertus-70b-instruct-2509,1.0,5,5,1.0,5
+D,meta-llama-3.1-8b-instruct,1.0,5,5,1.0,5
+D,openai-gpt-oss-120b,1.0,5,5,1.0,5
+E,apertus-70b-instruct-2509,1.0,5,5,1.0,5
+E,meta-llama-3.1-8b-instruct,0.0,0,5,1.0,5
+E,openai-gpt-oss-120b,0.4,2,5,0.6,3
