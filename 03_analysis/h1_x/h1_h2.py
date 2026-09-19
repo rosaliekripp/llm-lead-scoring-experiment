@@ -1,5 +1,5 @@
 """
-Exploratory H1 + H2 analysis:
+Exploratory H1 + H2 analysis
 
 Examines whether score stability and explanation-attribution stability differ
 between behavioral and firmographic feature perturbations.
