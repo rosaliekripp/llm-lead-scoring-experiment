@@ -35,7 +35,7 @@ pd.set_option("display.width", 180)
 pd.set_option("display.max_columns", 50)
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR.parent / "post_processing"
+DATA_DIR = BASE_DIR.parent / "preprocessing"
 SCORE_PATH = DATA_DIR / "llm_lead_intent_results_clean.csv"
 EXPLANATION_PATH = DATA_DIR / "llm_lead_intent_results_explanations_coded.csv"
 

@@ -47,7 +47,7 @@ pd.set_option("display.width", 180)
 pd.set_option("display.max_columns", 40)
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR.parent / "post_processing" / "llm_lead_intent_results_clean.csv"
+DATA_PATH = BASE_DIR.parent / "preprocessing" / "llm_lead_intent_results_clean.csv"
 RESULTS_DIR = BASE_DIR / "results"
 FIGURES_DIR = BASE_DIR / "figures"
 LOG_DIR = BASE_DIR / "logs"
@@ -168,7 +168,7 @@ def adjusted_predictions(result, data):
 # 1. Data preparation and matched Low-High pairs
 if not DATA_PATH.exists():
     raise FileNotFoundError(
-        f"Input data not found: {DATA_PATH}. Place the cleaned CSV in post_processing/."
+        f"Input data not found: {DATA_PATH}. Place the cleaned CSV in preprocessing/."
     )
 
 df = pd.read_csv(DATA_PATH)

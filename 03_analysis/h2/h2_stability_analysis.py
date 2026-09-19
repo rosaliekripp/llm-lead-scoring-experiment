@@ -39,7 +39,7 @@ from krippendorff import alpha as krippendorff_alpha
 
 # Configuration
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR.parent / "post_processing"
+DATA_DIR = BASE_DIR.parent / "preprocessing"
 TABLE_DIR = BASE_DIR / "tables"
 FIGURE_DIR = BASE_DIR / "figures"
 LOG_DIR = BASE_DIR / "logs"

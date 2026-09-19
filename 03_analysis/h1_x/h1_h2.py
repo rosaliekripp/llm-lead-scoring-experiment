@@ -25,7 +25,7 @@ from scipy.stats import fisher_exact
 # Configuration
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR.parent / "post_processing"
+DATA_DIR = BASE_DIR.parent / "preprocessing"
 SCORE_FILE = DATA_DIR / "llm_lead_intent_results_clean.csv"
 EXPLANATION_FILE = DATA_DIR / "llm_lead_intent_results_explanations_coded.csv"
 RESULTS_DIR = BASE_DIR / "results"

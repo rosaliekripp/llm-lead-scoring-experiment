@@ -56,8 +56,8 @@ RESULT_DIR = SCRIPT_DIR / "results"
 for directory in (FIG_DIR, LOG_DIR, RESULT_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-SCORES_PATH = PROJECT_ROOT / "post_processing" / "llm_lead_intent_results_clean.csv"
-EXPL_PATH = PROJECT_ROOT / "post_processing" / "llm_lead_intent_results_explanations_coded.csv"
+SCORES_PATH = PROJECT_ROOT / "preprocessing" / "llm_lead_intent_results_clean.csv"
+EXPL_PATH = PROJECT_ROOT / "preprocessing" / "llm_lead_intent_results_explanations_coded.csv"
 
 logger = logging.getLogger("H4")
 logger.setLevel(logging.INFO)

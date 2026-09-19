@@ -34,7 +34,7 @@ import pandas as pd
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR.parent / "post_processing"
+DATA_DIR = BASE_DIR.parent / "preprocessing"
 RESULTS_DIR = BASE_DIR / "results"
 FIGURES_DIR = BASE_DIR / "figures"
 LOG_DIR = BASE_DIR / "logs"
