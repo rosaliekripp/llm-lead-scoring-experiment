@@ -2,11 +2,10 @@ import re
 from pathlib import Path
 import pandas as pd
 
-# paths
-base_dir = Path(__file__).parent
+BASE_DIR = Path(__file__).parent
 
-# load data
-df = pd.read_csv(base_dir / "llm_lead_intent_results_clean.csv")
+# Load data
+df = pd.read_csv(BASE_DIR / "llm_lead_intent_results_clean.csv")
 
 # Features that could be perturbed, matches the profile_id naming
 FEATURES = ["company_size", "industry", "region", "website_dwell_time",
@@ -307,7 +306,7 @@ coding = pd.DataFrame(rows)
 coding_to_review = coding[~coding["perturbed_feature"].isin(["BASE", "unknown"])].copy()
 
 # Save the review file
-coding_to_review.to_csv(base_dir / "llm_lead_intent_results_explanations_coded.csv", index=False)
+coding_to_review.to_csv(BASE_DIR / "llm_lead_intent_results_explanations_coded.csv", index=False)
 
 # Short summary
 print("rows total:", len(coding))

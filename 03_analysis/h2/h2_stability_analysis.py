@@ -1,18 +1,12 @@
 """
-H2 – Stability analysis
-=======================
+H2: Stability analysis.
+
 Analyses score stability and explanation-attribution stability across five
 repeated runs of identical model inputs.
 
 Primary analyses only:
 - Score: intent (Low Intent / High Intent)
 - Explanation attribution: final_code (0–3, treated as nominal categories)
-
-Explicitly not included:
-- Fleiss' kappa
-- Mention stability (0 vs. 1–3)
-- Alignment stability (3 vs. 0–2)
-- Inferential model comparisons (reserved for H4)
 
 Analyzed data:
 - Score file: 975 rows = 195 identical-input/model units × 5 runs

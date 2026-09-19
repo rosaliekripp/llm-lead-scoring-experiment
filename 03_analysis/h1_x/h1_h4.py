@@ -1,4 +1,5 @@
-"""Supplementary exploratory H1-H4 analysis.
+"""
+Exploratory H1 + H4 analysis
 
 This script extends the original, working H1-H4 analysis and examines:
 1. Whether score sensitivity differs between behavioral and firmographic

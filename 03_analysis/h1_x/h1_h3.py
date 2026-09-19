@@ -1,4 +1,5 @@
-"""Complementary H1 + H3 analysis: explanation alignment by feature.
+"""
+Exploratory H1 + H3 analysis: explanation alignment by feature.
 
 Outcome
 -------

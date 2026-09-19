@@ -1,4 +1,5 @@
-"""H3 – Explanation alignment.
+"""
+H3: Explanation alignment.
 
 Variant 1: perturbation cases whose majority score differs from the majority
            score of the corresponding baseline.
@@ -7,9 +8,6 @@ Variant 2: all perturbation cases.
 The five API repetitions are NOT paired by run number. Scores are first reduced
 to a majority score per experimental condition. Explanation alignment is then
 measured per perturbation case as the share of its explanations assigned Code 3.
-
-This script deliberately performs no comparisons by feature type, stability, or
-model. Those belong to H1+H3, H2+H3, and H4, respectively.
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent 
-csv_path = BASE.parent.parent / "02_experiment" / "results" / "llm_lead_intent_results.csv"
+BASE_DIR = Path(__file__).resolve().parent 
+csv_path = BASE_DIR.parent.parent / "02_experiment" / "results" / "llm_lead_intent_results.csv"
 
 # Load data
 df = pd.read_csv(csv_path, encoding="utf-8-sig")
@@ -20,4 +20,4 @@ df["intent"] = df["intent"].replace({
 df = df.drop(columns=["parse_error", "latency_s"])
 
 # Save cleaned data
-df.to_csv(BASE / "llm_lead_intent_results_clean.csv", index=False, encoding="utf-8-sig")
+df.to_csv(BASE_DIR / "llm_lead_intent_results_clean.csv", index=False, encoding="utf-8-sig")

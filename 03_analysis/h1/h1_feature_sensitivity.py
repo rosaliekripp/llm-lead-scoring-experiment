@@ -1,4 +1,5 @@
-"""H1 feature-sensitivity analysis.
+"""
+H1: feature-sensitivity analysis.
 
 Primary estimand
 -----------------
