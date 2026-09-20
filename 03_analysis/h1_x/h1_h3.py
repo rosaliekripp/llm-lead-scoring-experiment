@@ -33,7 +33,7 @@ import numpy as np
 import pandas as pd
 
 
-# Paths
+# Configure input paths, output directories, and analysis settings.
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR.parent / "preprocessing"
 RESULTS_DIR = BASE_DIR / "results"
@@ -94,10 +94,22 @@ FEATURE_ORDER = [
     "email_response",
 ]
 TYPE_ORDER = ["Firmographic", "Behavioral"]
-COLORS = {"Firmographic": "#9ecae1", "Behavioral": "#08519c"}
+
+# Color system.
+
+FEATURE_TYPE_COLORS = {
+    "Behavioral": "#08519C",
+    "Firmographic": "#9ECAE1",
+}
+H3_CODE_COLORS = {
+    0: "#D8B4E2",  # Light purple
+    1: "#6A1B6A",  # Dark purple
+    2: "#9ECAE1",  # Light blue
+    3: "#08519C",  # Dark blue
+}
 
 
-# Logging
+# Configure file and console logging.
 logger = logging.getLogger("h1_h3")
 logger.setLevel(logging.INFO)
 logger.handlers.clear()
@@ -115,7 +127,8 @@ def log(message: str = "") -> None:
     logger.info(message)
 
 
-# Helpers
+# Define validation, transformation, bootstrap, and inference helpers.
+
 def require_columns(df: pd.DataFrame, columns: list[str]) -> None:
     missing = [column for column in columns if column not in df.columns]
     if missing:
@@ -213,7 +226,7 @@ def paired_bootstrap_difference_ci(
     return tuple(np.quantile(draws, [alpha / 2, 1 - alpha / 2]))
 
 
-# Load and prepare case-level alignment data
+# 1. Load and prepare case-level explanation-alignment data.
 if not CODED_FILE.exists():
     raise FileNotFoundError(f"Input file not found: {CODED_FILE}")
 
@@ -260,7 +273,7 @@ if observed_features != expected_features:
         f"Observed={sorted(observed_features)}; expected={sorted(expected_features)}"
     )
 
-# Descriptive results by feature and feature type
+# 2. Calculate descriptive results by feature and feature type.
 feature_summary = summarize_group(case, "feature")
 feature_summary["feature_type"] = feature_summary["feature"].map(FEATURE_TYPE)
 feature_summary["feature_label"] = feature_summary["feature"].map(FEATURE_LABELS)
@@ -275,7 +288,7 @@ type_summary["order"] = type_summary["feature_type"].map(
 )
 type_summary = type_summary.sort_values("order").drop(columns="order")
 
-# Full Code 0-3 distribution by feature and type for transparent supplementary use.
+# 3. Calculate complete Code 0–3 distributions for supplementary reporting.
 # Complete Code 0–3 distribution by feature, including zero-count combinations.
 feature_code_grid = pd.MultiIndex.from_product(
     [FEATURE_ORDER, [0, 1, 2, 3]],
@@ -345,7 +358,7 @@ code_distribution_type["share_within_type"] = (
     / code_distribution_type.groupby("feature_type")["count"].transform("sum")
 )
 
-# Paired feature-type comparison within profile x model strata
+# 4. Compare feature types within paired profile × model strata.
 stratum_type = (
     case.groupby(["base_profile", "model", "feature_type"], as_index=False)
     .agg(
@@ -393,7 +406,7 @@ inferential_result = pd.DataFrame(
     ]
 )
 
-# Save tables
+# 5. Save result tables and log the analysis summary.
 case.to_csv(RESULTS_DIR / "h1_h3_case_level_alignment.csv", index=False)
 feature_summary.to_csv(RESULTS_DIR / "h1_h3_alignment_by_feature.csv", index=False)
 type_summary.to_csv(RESULTS_DIR / "h1_h3_alignment_by_feature_type.csv", index=False)
@@ -433,13 +446,13 @@ log(type_summary.to_string(index=False))
 log("\nPaired feature-type test:")
 log(inferential_result.to_string(index=False))
 
-# Figure 1: alignment by individual feature
+# 6. Create Figure 1: alignment by individual feature.
 plot_feature = feature_summary.copy()
 y = plot_feature["mean_alignment_share"].to_numpy(float)
 low = plot_feature["bootstrap_95ci_low"].to_numpy(float)
 high = plot_feature["bootstrap_95ci_high"].to_numpy(float)
 yerr = np.vstack([np.maximum(0, y - low), np.maximum(0, high - y)])
-colors = plot_feature["feature_type"].map(COLORS).tolist()
+colors = plot_feature["feature_type"].map(FEATURE_TYPE_COLORS).tolist()
 
 fig, ax = plt.subplots(figsize=(9, 5.8))
 x = np.arange(len(plot_feature))
@@ -472,7 +485,7 @@ ax.set_title("Explanation alignment by manipulated feature")
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda value, _: f"{value:.0%}"))
 
 legend_handles = [
-    plt.Rectangle((0, 0), 1, 1, color=COLORS[feature_type], label=feature_type)
+    plt.Rectangle((0, 0), 1, 1, color=FEATURE_TYPE_COLORS[feature_type], label=feature_type)
     for feature_type in TYPE_ORDER
 ]
 legend_handles.append(
@@ -496,7 +509,7 @@ fig.savefig(
 )
 plt.close(fig)
 
-# Figure 2: feature-type means plus paired profile-model strata
+# 7. Create Figure 2: feature-type means and paired profile-model strata.
 plot_type = type_summary.set_index("feature_type").loc[TYPE_ORDER].reset_index()
 y = plot_type["mean_alignment_share"].to_numpy(float)
 low = plot_type["bootstrap_95ci_low"].to_numpy(float)
@@ -525,7 +538,7 @@ bars = ax.bar(
     yerr=yerr,
     capsize=6,
     width=0.58,
-    color=[COLORS[t] for t in TYPE_ORDER],
+    color=[FEATURE_TYPE_COLORS[t] for t in TYPE_ORDER],
     alpha=0.82,
     edgecolor="white",
     linewidth=0.8,
@@ -575,13 +588,8 @@ fig.savefig(
 )
 plt.close(fig)
 
-# Figure 3: complete Code 0–3 distribution by manipulated feature
-code_colors = {
-    0: "#d9d9d9",
-    1: "#fdae6b",
-    2: "#e6550d",
-    3: "#3182bd",
-}
+# 8. Create Figure 3: complete Code 0–3 distribution by feature.
+code_colors = H3_CODE_COLORS
 code_labels = {
     0: "Code 0: not specified",
     1: "Code 1: neutral",
@@ -616,7 +624,7 @@ for code in [0, 1, 2, 3]:
     # Suppress labels for very small segments to preserve readability.
     for bar, value, start in zip(bars, values, left):
         if value >= 0.08:
-            text_color = "white" if code in (2, 3) else "#222222"
+            text_color = "white" if code in (1, 3) else "#222222"
             ax.text(
                 start + value / 2,
                 bar.get_y() + bar.get_height() / 2,

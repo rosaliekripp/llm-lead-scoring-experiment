@@ -1,3 +1,4 @@
+import csv
 import logging
 import os
 import statistics
@@ -35,8 +36,11 @@ Lead data:
 - Demo requests: 2
 - Email response: Yes"""
 
-# Configure file and console logging.
+# Configure results file and console logging.
 BASE_DIR = Path(__file__).parent
+results_dir = BASE_DIR / "results"
+results_dir.mkdir(exist_ok=True)
+results_filename = results_dir / "api_screening_test_results.csv"
 log_dir = BASE_DIR / "logs"
 log_dir.mkdir(exist_ok=True)
 log_filename = (
@@ -146,6 +150,74 @@ def run_stage(concurrency: int, n_calls: int) -> list[dict]:
     return results
 
 
+def save_summary_csv(all_results: list[dict]) -> None:
+    """Append the summary metrics to the CSV results file."""
+    file_exists = results_filename.exists() and results_filename.stat().st_size > 0
+    run_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    with results_filename.open(
+        mode="a",
+        newline="",
+        encoding="utf-8",
+    ) as csv_file:
+        fieldnames = [
+            "timestamp",
+            "model",
+            "concurrency",
+            "calls",
+            "ok",
+            "errors",
+            "avg_seconds",
+            "p95_seconds",
+            "max_seconds",
+        ]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        # Write the header only when creating a new CSV file.
+        if not file_exists:
+            writer.writeheader()
+
+        # Calculate and append metrics for each concurrency stage.
+        for stage_results in all_results:
+            concurrency = stage_results["concurrency"]
+            results = stage_results["results"]
+            successful_results = [
+                result for result in results if result["status"] == "ok"
+            ]
+            errors = len(results) - len(successful_results)
+            latencies = (
+                sorted(
+                    result["latency"]
+                    for result in successful_results
+                )
+                if successful_results
+                else [0]
+            )
+            avg_latency = round(statistics.mean(latencies), 3)
+            p95 = (
+                round(latencies[int(len(latencies) * 0.95) - 1], 3)
+                if len(latencies) > 1
+                else latencies[0]
+            )
+            max_latency = max(latencies)
+
+            writer.writerow(
+                {
+                    "timestamp": run_timestamp,
+                    "model": MODEL,
+                    "concurrency": concurrency,
+                    "calls": len(results),
+                    "ok": len(successful_results),
+                    "errors": errors,
+                    "avg_seconds": avg_latency,
+                    "p95_seconds": p95,
+                    "max_seconds": max_latency,
+                }
+            )
+
+    log.info(f"CSV results saved: {results_filename}")
+
+
 def print_summary(all_results: list[dict]) -> None:
     """Log a summary for all completed concurrency stages."""
     log.info(f"\n{'=' * 50}")
@@ -216,6 +288,7 @@ def main() -> None:
         time.sleep(5)
 
     print_summary(all_results)
+    save_summary_csv(all_results)
 
 
 if __name__ == "__main__":

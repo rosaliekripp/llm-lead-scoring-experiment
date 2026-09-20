@@ -31,10 +31,10 @@ import seaborn as sns
 from krippendorff import alpha as krippendorff_alpha
 
 
-# Configuration
+# Configure paths, columns, expected data structure, and analysis settings.
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR.parent / "preprocessing"
-TABLE_DIR = BASE_DIR / "tables"
+TABLE_DIR = BASE_DIR / "results"
 FIGURE_DIR = BASE_DIR / "figures"
 LOG_DIR = BASE_DIR / "logs"
 
@@ -74,8 +74,21 @@ SCORE_MAP = {
     "high intent": 1,
 }
 
+# Color system.
 
-# Logging and directories
+INTENT_COLORS = {
+    "Low Intent": "#C75B5B",
+    "High Intent": "#4F8F6B",
+}
+STABILITY_COLORS = {
+    "fully_stable": "#4F8F6B",
+    "partly_stable": "#ECEEFC",
+    "unstable": "#C75B5B",
+}
+NEUTRAL_COLOR = "#AEB8E8"
+
+
+# Configure output directories and logging.
 
 for directory in (BASE_DIR, TABLE_DIR, FIGURE_DIR, LOG_DIR):
     directory.mkdir(parents=True, exist_ok=True)
@@ -99,7 +112,7 @@ def log(message: str = "") -> None:
     logger.info(message)
 
 
-# Data validation and preparation
+# Validate and prepare the score and explanation datasets.
 
 
 def require_columns(df: pd.DataFrame, columns: list[str], dataset_name: str) -> None:
@@ -263,7 +276,7 @@ def load_explanation_data() -> tuple[pd.DataFrame, list[str], str]:
     return df, unit_columns, condition_column
 
 
-# Stability metrics
+# Calculate reliability matrices and stability metrics.
 
 
 def make_reliability_matrix(
@@ -398,7 +411,7 @@ def summarise_stability(
     )
 
 
-# Output tables, logging, and figures
+# Log summaries and create output tables and figures.
 
 
 def log_summary(summary: pd.DataFrame, title: str) -> None:
@@ -460,17 +473,28 @@ def save_distribution_tables(
 def create_figures(
     score_units: pd.DataFrame, explanation_units: pd.DataFrame
 ) -> None:
+    # Apply the same neutral plotting theme to all H2 figures.
     sns.set_theme(style="whitegrid")
 
-    # Score: exact 5:0, 4:1, and 3:2 split across repeated runs.
+    # Figure 1: exact 5:0, 4:1, and 3:2 score splits across repeated runs.
     split_counts = (
         score_units["agreement_split"]
         .value_counts()
         .reindex(["5:0", "4:1", "3:2"], fill_value=0)
     )
     fig, ax = plt.subplots(figsize=(7, 5))
-    colors = ["#2ca25f", "#fec44f", "#de2d26"]
-    bars = ax.bar(split_counts.index, split_counts.values, color=colors)
+    colors = [
+        STABILITY_COLORS["fully_stable"],
+        STABILITY_COLORS["partly_stable"],
+        STABILITY_COLORS["unstable"],
+    ]
+    bars = ax.bar(
+        split_counts.index,
+        split_counts.values,
+        color=colors,
+        edgecolor="#7A7A7A",
+        linewidth=0.8,
+    )
     ax.bar_label(bars, padding=3)
     ax.set_title("Score stability across five identical runs")
     ax.set_xlabel("Majority-to-minority score split")
@@ -479,7 +503,7 @@ def create_figures(
     fig.savefig(FIGURE_DIR / "h2_fig1_score_agreement_distribution.png", dpi=300)
     plt.close(fig)
 
-    # Explanation: complete stability versus any code instability.
+    # Figure 2: complete explanation-code stability versus any instability.
     explanation_counts = pd.Series(
         {
             "Fully stable": int(explanation_units["fully_stable"].sum()),
@@ -490,7 +514,10 @@ def create_figures(
     bars = ax.bar(
         explanation_counts.index,
         explanation_counts.values,
-        color=["#2ca25f", "#de2d26"],
+        color=[
+            STABILITY_COLORS["fully_stable"],
+            STABILITY_COLORS["unstable"],
+        ],
     )
     ax.bar_label(bars, padding=3)
     ax.set_title("Stability of explanation-attribution codes")
@@ -499,13 +526,13 @@ def create_figures(
     fig.savefig(FIGURE_DIR / "h2_fig2_explanation_complete_stability.png", dpi=300)
     plt.close(fig)
 
-    # Explanation: distribution of the modal-code share.
+    # Figure 3: distribution of the modal explanation-code share.
     modal_counts = explanation_units["modal_share"].value_counts().sort_index()
     fig, ax = plt.subplots(figsize=(7, 5))
     bars = ax.bar(
         [f"{value:.1f}" for value in modal_counts.index],
         modal_counts.values,
-        color="#3182bd",
+        color=NEUTRAL_COLOR,
     )
     ax.bar_label(bars, padding=3)
     ax.set_title("Modal-code share across five identical runs")

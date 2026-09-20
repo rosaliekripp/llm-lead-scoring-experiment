@@ -1,15 +1,30 @@
+"""Create a review-ready coding template for model explanations.
+
+The script detects the perturbed feature, assigns a suggested explanation code
+from 0 to 3 using rule-based text analysis, removes baseline observations, and
+saves the resulting coding file for manual review.
+"""
+
 import re
 from pathlib import Path
+
 import pandas as pd
 
+# Configure the input and output directory relative to this script.
 BASE_DIR = Path(__file__).parent
 
-# Load data
+# Load the cleaned experiment results.
 df = pd.read_csv(BASE_DIR / "llm_lead_intent_results_clean.csv")
 
-# Features that could be perturbed, matches the profile_id naming
-FEATURES = ["company_size", "industry", "region", "website_dwell_time",
-            "demo_requests", "email_response"]
+# Define features that can be identified from the profile_id naming scheme.
+FEATURES = [
+    "company_size",
+    "industry",
+    "region",
+    "website_dwell_time",
+    "demo_requests",
+    "email_response",
+]
 
 # Surface terms that may refer to a feature inside the explanation text.
 FEATURE_TERMS = {
@@ -66,7 +81,7 @@ POS_WORDS = ["strong", "high", "active", "interest", "potential", "engag", "prom
 NEG_WORDS = ["low", "lack", " no ", "not ", "limited", "short", "neutral",
              "disinterest", "weak", "small", "less", "without", "absence"]
 
-# Feature detection
+# Detect and locate feature references in profile IDs and explanations.
 def perturbed_feature(profile_id):
     if profile_id.endswith("_BASE") or profile_id.split("_", 1)[-1] == "BASE":
         return "BASE"
@@ -76,15 +91,19 @@ def perturbed_feature(profile_id):
             return f
     return "unknown"
 
+
 def _terms(feature):
     return FEATURE_TERMS.get(feature, [])
+
 
 def mentions(scope, feature):
     return any(t in scope for t in _terms(feature))
 
+
 def first_pos(scope, feature):
     positions = [scope.find(t) for t in _terms(feature) if t in scope]
     return min(positions) if positions else -1
+
 
 def mentions_other_feature(scope, target_feature):
     for f, terms in FEATURE_TERMS.items():
@@ -94,7 +113,8 @@ def mentions_other_feature(scope, target_feature):
             return True
     return False
 
-# Sentence handling (quote-safe)
+# Split and filter sentences while preserving quoted text.
+
 def split_sentences(text):
     """Split into sentences without breaking inside quotes."""
     text = str(text)
@@ -115,17 +135,20 @@ def split_sentences(text):
             out.append(p)
     return out
 
+
 def relevant_sentences(text, feature):
     """All sentences mentioning the feature (lower-cased)."""
     res = [s.lower() for s in split_sentences(text) if mentions(s.lower(), feature)]
     return res
+
 
 def clause_polarity(clause):
     p = sum(clause.count(w) for w in POS_WORDS)
     n = sum(clause.count(w) for w in NEG_WORDS)
     return p, n
 
-# Core: classify the feature's role inside ONE sentence
+# Classify the feature's role within one explanation sentence.
+
 def role_in_sentence(sent, feature):
     if not mentions(sent, feature):
         return None
@@ -260,7 +283,8 @@ def role_in_sentence(sent, feature):
             return "neutral"
     return "support" if has_causal else "neutral"
 
-# Suggest a code 0..3 for the feature in the whole explanation
+# Suggest Code 0–3 for the feature across the complete explanation.
+
 def suggest_code(text, feature):
     if feature in ("BASE", "unknown"):
         return "", ""
@@ -282,37 +306,45 @@ def suggest_code(text, feature):
         return 2, "refuted side of contrast"
     return 1, "neutral / enumeration"
 
-# Build the coding template
+# Build the row-level coding template.
 rows = []
 for _, r in df.iterrows():
     feat = perturbed_feature(r["profile_id"])
     code, reason = suggest_code(r["reasoning"], feat)
-    rows.append({
-        "profile_id": r["profile_id"],
-        "run": r["run"],
-        "model": r["model"],
-        "perturbed_feature": feat,
-        "intent": r["intent"],
-        "reasoning": r["reasoning"],
-        "suggested_code": code,
-        "suggestion_reason": reason,
-        "final_code": code,   # Author overwrites this column during review
-        "checked": "",        # Author marks with X once reviewed
-    })
+    rows.append(
+        {
+            "profile_id": r["profile_id"],
+            "run": r["run"],
+            "model": r["model"],
+            "perturbed_feature": feat,
+            "intent": r["intent"],
+            "reasoning": r["reasoning"],
+            "suggested_code": code,
+            "suggestion_reason": reason,
+            "final_code": code,  # Author overwrites this column during review.
+            "checked": "",  # Author marks with X once reviewed.
+        }
+    )
 
 coding = pd.DataFrame(rows)
 
-# Drop base rows since there is no perturbed feature to code
+# Remove baseline and unknown-feature rows because no perturbation can be coded.
 coding_to_review = coding[~coding["perturbed_feature"].isin(["BASE", "unknown"])].copy()
 
-# Save the review file
-coding_to_review.to_csv(BASE_DIR / "llm_lead_intent_results_explanations_coded.csv", index=False)
+# Save the coding template for manual review.
+coding_to_review.to_csv(
+    BASE_DIR / "llm_lead_intent_results_explanations_coded.csv",
+    index=False,
+)
 
-# Short summary
+# Print a concise summary of the generated coding template.
 print("rows total:", len(coding))
 print("rows to review:", len(coding_to_review))
 print("\nsuggested code distribution:")
 print(coding_to_review["suggested_code"].value_counts(dropna=False).sort_index())
 print("\nby feature:")
-print(coding_to_review.groupby("perturbed_feature")["suggested_code"]
-      .value_counts().unstack(fill_value=0))
+print(
+    coding_to_review.groupby("perturbed_feature")["suggested_code"]
+    .value_counts()
+    .unstack(fill_value=0)
+)

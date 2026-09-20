@@ -17,12 +17,13 @@ import logging
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 import pandas as pd
 import seaborn as sns
 from scipy.stats import fisher_exact
 
 
-# Configuration
+# Configure paths, columns, and the expected repeated-run structure.
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR.parent / "preprocessing"
@@ -45,8 +46,19 @@ EXPECTED_RUNS = 5
 BEHAVIORAL_FEATURES = {"website_dwell_time", "demo_requests", "email_response"}
 FIRMOGRAPHIC_FEATURES = {"company_size", "industry", "region"}
 
+# Color system.
 
-# Logging
+FEATURE_TYPE_COLORS = {
+    "Behavioral": "#08519C",
+    "Firmographic": "#9ECAE1",
+}
+OUTCOME_COLORS = {
+    "Lead score": "#093C6F",
+    "Explanation attribution": "#76B5D7",
+}
+
+
+# Configure file and console logging.
 
 logger = logging.getLogger("h1_h2_feature_stability")
 logger.setLevel(logging.INFO)
@@ -65,7 +77,7 @@ def log(message=""):
     logger.info(message)
 
 
-# Preparation
+# Validate and prepare the score and explanation datasets.
 
 
 def extract_feature(condition):
@@ -156,7 +168,7 @@ def load_explanation_data():
     return validate_and_prepare(df, "analysis_value", "Explanation")
 
 
-# Analysis
+# Construct stability units and run the exploratory analyses.
 
 
 def create_stability_units(df, outcome):
@@ -222,7 +234,7 @@ def analyse_outcome(units, outcome):
     return group_summary, feature_summary, contingency
 
 
-# Visualization
+# Create and save the combined H1 + H2 figure.
 
 
 def create_figure(group_summary):
@@ -233,21 +245,61 @@ def create_figure(group_summary):
     )
 
     fig, ax = plt.subplots(figsize=(7.5, 4.8))
+    fig, ax = plt.subplots(figsize=(7.5, 4.8))
+
     sns.barplot(
         data=plot_data,
         x="feature_type",
         y="instability_rate",
         hue="Outcome",
-        palette=["#2c7fb8", "#d95f0e"],
+        palette=["#FFFFFF", "#FFFFFF"],
+        saturation=1,
         ax=ax,
     )
 
-    for container in ax.containers:
+    feature_order = ["Behavioral", "Firmographic"]
+    outcome_order = ["Lead score", "Explanation attribution"]
+
+    bar_colors = {
+        ("Behavioral", "Lead score"): FEATURE_TYPE_COLORS["Behavioral"],
+        ("Firmographic", "Lead score"): FEATURE_TYPE_COLORS["Firmographic"],
+        ("Behavioral", "Explanation attribution"): OUTCOME_COLORS["Lead score"],
+        ("Firmographic", "Explanation attribution"):
+            OUTCOME_COLORS["Explanation attribution"],
+    }
+
+    for container, outcome in zip(ax.containers, outcome_order):
+        for bar, feature_type in zip(container, feature_order):
+            bar.set_facecolor(bar_colors[(feature_type, outcome)])
+            bar.set_edgecolor("white")
+            bar.set_linewidth(0.8)
+
         ax.bar_label(
             container,
             labels=[f"{bar.get_height():.1%}" for bar in container],
             padding=3,
         )
+
+    if ax.get_legend() is not None:
+        ax.get_legend().remove()
+
+    feature_legend = [
+        Patch(
+            facecolor=FEATURE_TYPE_COLORS["Behavioral"],
+            edgecolor="white",
+            label="Behavioral",
+        ),
+        Patch(
+            facecolor=FEATURE_TYPE_COLORS["Firmographic"],
+            edgecolor="white",
+            label="Firmographic",
+        ),
+    ]
+
+    ax.legend(
+        handles=feature_legend,
+        title="Feature type",
+    )
 
     maximum = plot_data["instability_rate"].max()
     ax.set_ylim(0, max(0.10, maximum * 1.30))
@@ -262,7 +314,7 @@ def create_figure(group_summary):
     plt.close(fig)
 
 
-# Main
+# Run the complete analysis workflow.
 
 
 def main():
@@ -290,14 +342,14 @@ def main():
     all_features = pd.concat([score_feature, explanation_feature], ignore_index=True)
 
     all_units.to_csv(RESULTS_DIR / "h1_h2_stability_units.csv", index=False)
-    all_groups.to_csv(RESULTS_DIR /  "h1_h2_feature_type_summary.csv", index=False)
+    all_groups.to_csv(RESULTS_DIR / "h1_h2_feature_type_summary.csv", index=False)
     all_features.to_csv(
-        RESULTS_DIR /  "h1_h2_individual_feature_summary.csv", index=False
+        RESULTS_DIR / "h1_h2_individual_feature_summary.csv", index=False
     )
 
-    score_table.to_csv(RESULTS_DIR /  "h1_h2_score_contingency.csv", index=False)
+    score_table.to_csv(RESULTS_DIR / "h1_h2_score_contingency.csv", index=False)
     explanation_table.to_csv(
-        RESULTS_DIR /  "h1_h2_explanation_contingency.csv", index=False
+        RESULTS_DIR / "h1_h2_explanation_contingency.csv", index=False
     )
 
     create_figure(all_groups)

@@ -80,6 +80,27 @@ FIRMOGRAPHIC = ["company_size", "industry", "region"]
 FEATURES = BEHAVIORAL + FIRMOGRAPHIC
 SCORE_MAP = {"Low Intent": 0, "High Intent": 1}
 
+# Color system.
+
+FEATURE_TYPE_COLORS = {
+    "behavioral": "#08519C",
+    "firmographic": "#9ECAE1",
+}
+MODEL_COLORS = {
+    "Llama": "#922991",
+    "Mistral": "#F86324",
+    "Apertus": "#088BCC",
+}
+INTENT_COLORS = {
+    "Low Intent": "#C75B5B",
+    "High Intent": "#4F8F6B",
+}
+DELTA_COLORS = {
+    -1: "#C75B5B",
+    0: "#ECEEFC",
+    1: "#4F8F6B",
+}
+
 
 def wilson(successes, total, alpha=0.05):
     """Return a Wilson confidence interval; return missing values for n=0."""
@@ -166,7 +187,7 @@ def adjusted_predictions(result, data):
     return output, float(difference)
 
 
-# 1. Data preparation and matched Low-High pairs
+# 1. Prepare the data and construct matched Low-High pairs
 if not DATA_PATH.exists():
     raise FileNotFoundError(
         f"Input data not found: {DATA_PATH}. Place the cleaned CSV in preprocessing/."
@@ -217,7 +238,7 @@ print(f"Matched Low-High pairs: {len(pairs)}")
 print(f"Profile-feature clusters: {pairs.cluster_pf.nunique()}")
 
 
-# 2. Primary confirmatory H1 analysis
+# 2. Run the primary confirmatory H1 analysis
 print("\nPRIMARY CONFIRMATORY ANALYSIS")
 primary_gee = fit_gee(pairs, covariance="exchangeable")
 print(primary_gee.summary())
@@ -236,7 +257,7 @@ model_type_rates = rate_table(pairs, ["model", "feature_type"], "sensitivity")
 model_type_rates["analysis"] = "Raw descriptive sensitivity rate by model"
 
 
-# 3. Supplementary signed-change analysis
+# 3. Analyze supplementary signed Low-High changes
 print("\nSUPPLEMENTARY SIGNED LOW-HIGH CHANGES")
 signed_counts = (pairs.groupby(["feature_type", "feature", "delta"], observed=True)
                  .size().rename("count").reset_index())
@@ -247,7 +268,7 @@ signed_counts["share_within_feature"] = (
 signed_counts["analysis"] = "Signed Low-High delta distribution"
 
 
-# 4. Supplementary baseline-anchored and directional analyses
+# 4. Run supplementary baseline-anchored and directional analyses
 print("\nSUPPLEMENTARY BASELINE-ANCHORED ANALYSIS")
 base = (df[df.feature == "BASE"][["base_profile", "model", "run", "score"]]
         .rename(columns={"score": "base_score"}))
@@ -287,7 +308,7 @@ directional_rates = rate_table(
 directional_rates["analysis"] = "Directional consistency among baseline changes"
 
 
-# 5. Exploratory feature-level analysis (descriptive)
+# 5. Summarize exploratory feature-level results descriptively
 print("\nEXPLORATORY FEATURE-LEVEL ANALYSIS")
 feature_rates = rate_table(pairs, ["feature_type", "feature"], "sensitivity")
 feature_rates["analysis"] = "Exploratory feature-level sensitivity"
@@ -295,7 +316,7 @@ feature_rates = feature_rates.sort_values("rate", ascending=False)
 print(feature_rates.to_string(index=False))
 
 
-# 6. Robustness analyses
+# 6. Run robustness analyses
 print("\nROBUSTNESS ANALYSES")
 independence_gee = fit_gee(pairs, covariance="independence")
 robustness_rows = [
@@ -311,7 +332,7 @@ for profile in sorted(pairs.base_profile.unique()):
 robustness_results = pd.DataFrame(robustness_rows)
 
 
-# 7. Save result tables
+# 7. Combine and save result tables
 confirmatory_table = pd.concat([primary_results, baseline_results], ignore_index=True)
 descriptive_table = pd.concat([
     type_rates, model_type_rates, adjusted, eligible_rates,
@@ -324,12 +345,8 @@ robustness_results.to_csv(RESULTS_DIR / "h1_robustness_results.csv", index=False
 pairs.to_csv(RESULTS_DIR / "h1_matched_pair_analysis_data.csv", index=False)
 
 
-# 8. Figures
+# 8. Create and save figures
 sns.set_theme(style="whitegrid", context="notebook")
-palette = {
-    "behavioral": "#2C7FB8",
-    "firmographic": "#D95F0E",
-}
 # Descriptive feature-type sensitivity rates.
 # These intervals do not account for clustering and therefore support
 # interpretation but do not replace the primary GEE inference.
@@ -385,9 +402,10 @@ sns.barplot(
     hue="intent",
     hue_order=["Low Intent", "High Intent"],
     palette={
-        "High Intent": "#31A354",
-        "Low Intent": "#DE2D26",
+        "High Intent": INTENT_COLORS["High Intent"],
+        "Low Intent": INTENT_COLORS["Low Intent"],
     },
+    saturation=1,
     ax=ax,
 )
 ax.set(
@@ -420,7 +438,10 @@ x_positions = np.arange(len(r))
 ax.bar(
     x_positions,
     r["rate"],
-    color=[palette[feature_type] for feature_type in r["feature_type"]],
+    color=[
+    FEATURE_TYPE_COLORS[feature_type]
+    for feature_type in r["feature_type"]
+    ],
     width=0.55,
 )
 ax.errorbar(
@@ -457,7 +478,7 @@ ax.annotate(
     fontsize=10,
     bbox={
         "boxstyle": "round",
-        "facecolor": "white",
+        "facecolor": "#ECEEFC",
         "edgecolor": "grey",
         "alpha": 0.95,
     },
@@ -473,7 +494,11 @@ ax.set(
     ylim=(0, 1),
 )
 fig.tight_layout()
-
+fig.savefig(
+    FIGURES_DIR / "h1_fig2_feature_type_sensitivity.png",
+    dpi=300,
+    bbox_inches="tight",
+)
 plt.close(fig)
 
 # Figure 3: exploratory feature-level sensitivity rates.
@@ -489,7 +514,7 @@ for i, row in enumerate(fr.itertuples(index=False)):
     ax.plot(
         [row.ci_low, row.ci_high],
         [i, i],
-        color=palette[row.feature_type],
+        color=FEATURE_TYPE_COLORS[row.feature_type],
         linewidth=2.5,
         solid_capstyle="round",
     )
@@ -498,7 +523,7 @@ for i, row in enumerate(fr.itertuples(index=False)):
         i,
         marker="o",
         linestyle="none",
-        color=palette[row.feature_type],
+        color=FEATURE_TYPE_COLORS[row.feature_type],
         markersize=9,
     )
 ax.set_yticks(range(len(fr)))
@@ -514,7 +539,7 @@ legend_handles = [
         markersize=7,
         label=feature_type.title(),
     )
-    for feature_type, color in palette.items()
+    for feature_type, color in FEATURE_TYPE_COLORS.items()
 ]
 ax.legend(
     handles=legend_handles,
@@ -547,9 +572,9 @@ share = share.loc[feature_order]
 fig, ax = plt.subplots(figsize=(8, 5))
 left = np.zeros(len(share))
 delta_styles = [
-    (-1, "#D95F02", "Decrease (-1)"),
-    (0, "#BDBDBD", "No change (0)"),
-    (1, "#1B7837", "Increase (+1)"),
+    (-1, DELTA_COLORS[-1], "Decrease (-1)"),
+    (0, DELTA_COLORS[0], "No change (0)"),
+    (1, DELTA_COLORS[1], "Increase (+1)"),
 ]
 for delta_value, color, label in delta_styles:
     ax.barh(
@@ -600,7 +625,7 @@ sns.heatmap(
     profile_feature_rates,
     annot=True,
     fmt=".2f",
-    cmap="YlOrRd",
+    cmap="Blues",
     vmin=0,
     vmax=1,
     linewidths=0.5,

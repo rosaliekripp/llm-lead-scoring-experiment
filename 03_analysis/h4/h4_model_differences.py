@@ -47,7 +47,7 @@ from scipy.stats import chi2, friedmanchisquare, norm, wilcoxon
 from statsmodels.stats.multitest import multipletests
 
 
-# 0. Paths and logging
+# Configure paths, output directories, logging, and plot settings.
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 FIG_DIR = SCRIPT_DIR / "figures"
@@ -75,12 +75,40 @@ logger.addHandler(console_handler)
 sns.set_theme(style="whitegrid", context="notebook")
 ALPHA = 0.05
 
+# Color system.
+
+MODEL_COLORS = {
+    "llama": "#A95EA8",
+    "gpt-oss": "#E88961",
+    "apertus": "#55ADD8",
+}
+INPUT_TYPE_COLORS = {
+    "Baseline": "#BAC9D2",
+    "Perturbed": "#57626F",
+}
+H3_CODE_COLORS = {
+    0: "#D8B4E2",  # Light purple
+    1: "#6A1B6A",  # Dark purple
+    2: "#9ECAE1",  # Light blue
+    3: "#08519C",  # Dark blue
+}
+NEUTRAL_COLOR = "#ECEEFC"
+
+
+def model_color(model_name: str) -> str:
+    """Return the agreed color for a model based on its displayed name."""
+    normalized = str(model_name).strip().lower()
+    for model_key, color in MODEL_COLORS.items():
+        if model_key in normalized:
+            return color
+    raise ValueError(f"No color configured for model: {model_name!r}")
+
 
 def log_df(title: str, frame: pd.DataFrame) -> None:
     logger.info("%s\n%s", title, frame.to_string(index=False))
 
 
-# 1. Data preparation and validation
+# 1. Load, validate, and prepare the score and explanation data.
 def parse_profile_id(profile_id: str) -> dict[str, str | bool]:
     """Parse base profile, feature, condition, and baseline status."""
     value = str(profile_id).strip()
@@ -181,7 +209,7 @@ def load_and_prepare() -> tuple[pd.DataFrame, pd.DataFrame]:
     return scores, expl
 
 
-# 2. Logistic mixed-model helpers
+# 2. Define logistic mixed-model and contrast helper functions.
 def fit_logistic_glmm(
     data: pd.DataFrame,
     formula: str,
@@ -321,7 +349,7 @@ def holm_adjust(frame: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
-# 3. Matched MAR helpers
+# 3. Define matched Modal Agreement Rate helper functions.
 def modal_agreement(
     data: pd.DataFrame, value_column: str, grouping: list[str]
 ) -> pd.DataFrame:
@@ -385,11 +413,12 @@ def matched_mar_tests(mar: pd.DataFrame, analysis: str, models: list[str]) -> tu
     return omnibus, holm_adjust(pd.DataFrame(rows))
 
 
-# 4. Main analysis
+# 4. Run the H4 analyses and save result tables.
 def main() -> None:
     scores, expl = load_and_prepare()
     models = sorted(scores["model"].unique())
     reference = models[0]
+    model_palette = {model: model_color(model) for model in models}
 
     descriptive_tables = []
     fixed_effect_tables = []
@@ -619,6 +648,8 @@ def main() -> None:
         y="high_intent_rate",
         hue="input_type",
         order=models,
+        palette=INPUT_TYPE_COLORS,
+        saturation=1,
         ax=ax,
     )
     ax.set(title="High-Intent rate by model and input type", xlabel="Model", ylabel="High-Intent rate", ylim=(0, 1))
@@ -635,6 +666,7 @@ def main() -> None:
         y="score",
         hue="model",
         hue_order=models,
+        palette=model_palette,
         errorbar=("ci", 95),
         dodge=0.15,
         ax=ax,
@@ -650,8 +682,27 @@ def main() -> None:
         (expl_mar, "Explanation-code stability by model", "h4b2_explanation_mar.png"),
     ):
         fig, ax = plt.subplots(figsize=(10, 5.5))
-        sns.boxplot(data=frame, x="model", y="mar", order=models, ax=ax, color="#8fbcd4")
-        sns.stripplot(data=frame, x="model", y="mar", order=models, ax=ax, color="black", alpha=0.35, size=3)
+        sns.boxplot(
+            data=frame,
+            x="model",
+            y="mar",
+            order=models,
+            hue="model",
+            palette=model_palette,
+            legend=False,
+            saturation=1,
+            ax=ax,
+        )
+        sns.stripplot(
+            data=frame,
+            x="model",
+            y="mar",
+            order=models,
+            color="black",
+            alpha=0.35,
+            size=3,
+            ax=ax,
+        )
         ax.set(title=title, xlabel="Model", ylabel="Modal Agreement Rate", ylim=(0, 1.03))
         ax.tick_params(axis="x", rotation=20)
         fig.tight_layout()
@@ -660,7 +711,18 @@ def main() -> None:
 
     # Alignment rate.
     fig, ax = plt.subplots(figsize=(9, 5.5))
-    sns.barplot(data=expl, x="model", y="aligned", order=models, errorbar=("ci", 95), ax=ax, color="#4daf4a")
+    sns.barplot(
+        data=expl,
+        x="model",
+        y="aligned",
+        order=models,
+        hue="model",
+        palette=model_palette,
+        errorbar=("ci", 95),
+        legend=False,
+        saturation=1,
+        ax=ax,
+    )
     ax.set(title="Explanation alignment rate by model (Code 3)", xlabel="Model", ylabel="Alignment rate", ylim=(0, 1))
     ax.tick_params(axis="x", rotation=20)
     fig.tight_layout()
@@ -670,8 +732,8 @@ def main() -> None:
     # Nominal explanation-code distribution.
     fig, ax = plt.subplots(figsize=(10, 5.8))
     bottom = np.zeros(len(models))
-    colors = ["#d73027", "#fc8d59", "#91bfdb", "#1a9850"]
-    for code, color in zip((0, 1, 2, 3), colors):
+    for code in (0, 1, 2, 3):
+        color = H3_CODE_COLORS[code]
         values = code_rates.loc[models, code].to_numpy()
         ax.bar(models, values, bottom=bottom, label=f"Code {code}", color=color)
         bottom += values
@@ -690,6 +752,8 @@ def main() -> None:
         y="high_intent_rate",
         hue="model",
         hue_order=models,
+        palette=model_palette,
+        saturation=1,
         ax=ax,
     )
     ax.set(title="Baseline High-Intent rate by base profile and model (descriptive)", xlabel="Base profile", ylabel="High-Intent rate across five runs", ylim=(0, 1))

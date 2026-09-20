@@ -1,23 +1,45 @@
-import pandas as pd
+"""Clean and standardize the raw lead-intent experiment results.
+
+The script removes observations with parsing errors, standardizes the intent
+labels, drops processing-related columns, and saves the cleaned dataset for
+subsequent analyses.
+"""
+
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent 
-csv_path = BASE_DIR.parent.parent / "02_experiment" / "results" / "llm_lead_intent_results.csv"
+import pandas as pd
 
-# Load data
+# Configure the input and output paths relative to this script.
+BASE_DIR = Path(__file__).resolve().parent
+csv_path = (
+    BASE_DIR.parent.parent
+    / "02_experiment"
+    / "results"
+    / "llm_lead_intent_results.csv"
+)
+
+# Load the raw experiment results.
 df = pd.read_csv(csv_path, encoding="utf-8-sig")
 
-# Drop failed parses
+# Retain only successfully parsed model responses.
 df = df[df["parse_error"].isna()].copy()
 
-# Standardize intent: 1 -> "High Intent", 2 -> "Low Intent"
-df["intent"] = df["intent"].replace({
-    "1": "High Intent", "2": "Low Intent",   # if String
-    1: "High Intent", 2: "Low Intent"        # if Integer
-})
+# Standardize string and integer intent codes to the final text labels.
+df["intent"] = df["intent"].replace(
+    {
+        "1": "High Intent",
+        "2": "Low Intent",
+        1: "High Intent",
+        2: "Low Intent",
+    }
+)
 
-# Remove the "parse_error" and "latency_s" columns
+# Remove processing-related columns that are not required for analysis.
 df = df.drop(columns=["parse_error", "latency_s"])
 
-# Save cleaned data
-df.to_csv(BASE_DIR / "llm_lead_intent_results_clean.csv", index=False, encoding="utf-8-sig")
+# Save the cleaned data for the subsequent hypothesis analyses.
+df.to_csv(
+    BASE_DIR / "llm_lead_intent_results_clean.csv",
+    index=False,
+    encoding="utf-8-sig",
+)

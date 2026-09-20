@@ -31,7 +31,7 @@ from statsmodels.genmod.families import Binomial, Gaussian
 from statsmodels.genmod.generalized_estimating_equations import GEE
 from statsmodels.stats.proportion import proportion_confint
 
-# 1. Paths and general settings
+# 1. Configure paths, output directories, display settings, and colors.
 pd.set_option("display.width", 180)
 pd.set_option("display.max_columns", 50)
 
@@ -46,17 +46,20 @@ LOG_DIR = BASE_DIR / "logs"
 for directory in (RESULTS_DIR, FIGURES_DIR, LOG_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-PALETTE = {
-    "behavioral": "#2C7FB8",
-    "firmographic": "#D95F0E",
+# Color system.
+
+FEATURE_TYPE_COLORS = {
+    "behavioral": "#08519C",
+    "firmographic": "#9ECAE1",
 }
+
 BEHAVIORAL = ["website_dwell_time", "demo_requests", "email_response"]
 FIRMOGRAPHIC = ["company_size", "industry", "region"]
 FEATURES = BEHAVIORAL + FIRMOGRAPHIC
 SCORE_MAP = {"Low Intent": 0, "High Intent": 1}
 
 
-# 2. Logging
+# 2. Configure simultaneous file and console logging.
 class Tee:
     """Write output to the terminal and a log file."""
 
@@ -77,7 +80,7 @@ original_stdout = sys.stdout
 sys.stdout = Tee(original_stdout, log_file)
 
 
-# 3. Helper functions
+# 3. Define data, inference, output, and visualization helper functions.
 def wilson(successes, total, alpha=0.05):
     """Return a Wilson confidence interval for a binomial proportion."""
     if total == 0:
@@ -240,11 +243,14 @@ def plot_rate_figure(table, title, ylabel, filename):
         ax.errorbar(
             x,
             rates,
-            yerr=[rates - rows["ci_low"].to_numpy(), rows["ci_high"].to_numpy() - rates],
+            yerr=[
+                rates - rows["ci_low"].to_numpy(),
+                rows["ci_high"].to_numpy() - rates,
+            ],
             fmt=markers[feature_type],
             linestyle="none",
-            color=PALETTE[feature_type],
-            ecolor=PALETTE[feature_type],
+            color=FEATURE_TYPE_COLORS[feature_type],
+            ecolor=FEATURE_TYPE_COLORS[feature_type],
             markersize=8,
             elinewidth=1.5,
             capsize=5,
@@ -259,7 +265,7 @@ def plot_rate_figure(table, title, ylabel, filename):
     plt.close(fig)
 
 
-# 4. Load and validate score data
+# 4. Load, validate, and prepare score data.
 if not SCORE_PATH.exists():
     raise FileNotFoundError(f"Input data not found: {SCORE_PATH}")
 if not EXPLANATION_PATH.exists():
@@ -282,7 +288,7 @@ if score_df["score"].isna().any():
 score_df = add_design_columns(score_df)
 
 
-# 5. Score sensitivity by Feature Type x Model
+# 5. Analyze score sensitivity by Feature Type × Model.
 perturbations = score_df[score_df["feature"] != "BASE"].copy()
 pairs = (
     perturbations.pivot_table(
@@ -353,7 +359,7 @@ score_sensitivity_test = joint_interaction_test(
 )
 
 
-# 6. Load and prepare coded explanation data
+# 6. Load, validate, and prepare coded explanation data.
 explanation_df = pd.read_csv(EXPLANATION_PATH)
 required_explanation_columns = {
     "profile_id", "run", "model", "reasoning", "final_code"
@@ -385,7 +391,7 @@ print(f"Coded explanations: {len(explanation_df)}")
 print(f"Exact perturbed profiles: {explanation_df['profile_id'].nunique()}")
 
 
-# 7. Explanation alignment by Feature Type x Model
+# 7. Analyze explanation alignment by Feature Type × Model.
 alignment_rates = rate_table(
     explanation_df, ["model", "feature_type"], "aligned"
 )
@@ -425,7 +431,7 @@ alignment_test = joint_interaction_test(
 )
 
 
-# 8. Explanation length by Feature Type x Model
+# 8. Analyze explanation length by Feature Type × Model.
 length_descriptive = (
     explanation_df.groupby(["model", "feature_type"], observed=True)["word_count"]
     .agg(
@@ -486,7 +492,7 @@ for offset, feature_type in ((-width / 2, "behavioral"), (width / 2, "firmograph
         width=width,
         yerr=rows["sd"],
         capsize=4,
-        color=PALETTE[feature_type],
+        color=FEATURE_TYPE_COLORS[feature_type],
         label=feature_type.title(),
         alpha=0.9,
     )
@@ -507,7 +513,7 @@ fig.savefig(
 plt.close(fig)
 
 
-# 9. Consolidated interaction-test table
+# 9. Consolidate and save the interaction-test results.
 interaction_tests = pd.DataFrame(
     [score_sensitivity_test, alignment_test, length_test]
 )

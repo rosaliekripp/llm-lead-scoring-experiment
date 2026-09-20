@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-# Paths and output folders
+# Configure input paths and output directories.
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR.parent / "preprocessing"
 FIGURES_DIR = BASE_DIR / "figures"
@@ -32,13 +32,31 @@ for directory in (FIGURES_DIR, LOGS_DIR, RESULTS_DIR):
 CLEAN_FILE = DATA_DIR / "llm_lead_intent_results_clean.csv"
 CODED_FILE = DATA_DIR / "llm_lead_intent_results_explanations_coded.csv"
 
-# Settings
+# Configure analysis settings.
 ALPHA = 0.05                 # 95% confidence intervals; not a test threshold
 N_BOOTSTRAP = 10_000
 RANDOM_SEED = 2026
 EXPECTED_RUNS_PER_CASE = 5
 
-# Logging
+# Color system.
+
+H3_CODE_COLORS = {
+    0: "#D8B4E2",  # Light purple
+    1: "#6A1B6A",  # Dark purple
+    2: "#9ECAE1",  # Light blue
+    3: "#08519C",  # Dark blue
+}
+SCORE_CHANGE_COLORS = {
+    "stable": "#2c7fb8",
+    "changed": "#08519C",
+}
+VARIANT_COLORS = {
+    "V1": "#08519C",
+    "V2": "#9ECAE1",
+}
+NEUTRAL_COLOR = "#3182bd"
+
+# Configure file and console logging.
 logger = logging.getLogger("h3")
 logger.setLevel(logging.INFO)
 logger.handlers.clear()
@@ -56,7 +74,8 @@ def log(message: str = "") -> None:
     logger.info(message)
 
 
-# Helpers
+# Define validation, transformation, and bootstrap helper functions.
+
 def require_columns(df: pd.DataFrame, columns: list[str], dataset: str) -> None:
     missing = [column for column in columns if column not in df.columns]
     if missing:
@@ -150,7 +169,7 @@ def summarize_variant(cases: pd.DataFrame, variant: str) -> dict[str, float | in
     }
 
 
-# Load and validate data
+# 1. Load and validate the score and explanation data.
 if not CLEAN_FILE.exists():
     raise FileNotFoundError(f"Input file not found: {CLEAN_FILE}")
 if not CODED_FILE.exists():
@@ -178,7 +197,7 @@ if coding["perturbation"].str.upper().eq("BASE").any():
 
 coding["aligned"] = coding["final_code"].eq(3).astype(int)
 
-# Determine score-changing cases by majority-score comparison with baseline
+# 2. Identify score-changing cases by comparing majority scores with baseline.
 # No run-level pairing is used.
 condition_scores = (
     scores.groupby(["profile_id", "model", "base_profile", "perturbation"], as_index=False)
@@ -220,7 +239,7 @@ perturbation_scores["score_changed"] = (
     != perturbation_scores["baseline_majority_score"]
 ).astype(int)
 
-# Aggregate explanation coding to the perturbation-case level
+# 3. Aggregate explanation coding to the perturbation-case level.
 # One case = profile x model x perturbation condition.
 case_coding = (
     coding.groupby(
@@ -268,7 +287,7 @@ if not cases["n_score_runs"].eq(EXPECTED_RUNS_PER_CASE).all():
 if not cases["n_baseline_score_runs"].eq(EXPECTED_RUNS_PER_CASE).all():
     log("WARNING: Not every baseline condition has exactly five score runs.")
 
-# H3 variants – descriptive analysis only
+# 4. Construct the two H3 variants for descriptive analysis.
 variant_1 = cases[cases["score_changed"].eq(1)].copy()
 variant_2 = cases.copy()
 
@@ -285,7 +304,7 @@ summary = pd.DataFrame(
     ]
 )
 
-# Complete Code 0–3 distribution, without feature/model comparisons.
+# 5. Calculate the complete Code 0–3 distribution without model comparisons.
 code_distribution = pd.DataFrame(
     [
         {
@@ -312,7 +331,7 @@ code_distribution["share"] = code_distribution.groupby("variant")["count"].trans
     lambda x: x / x.sum()
 )
 
-# Save result tables
+# 6. Save result tables and log the analysis summary.
 cases.to_csv(RESULTS_DIR / "h3_case_level_data.csv", index=False)
 summary.to_csv(RESULTS_DIR / "h3_variant_summary.csv", index=False)
 code_distribution.to_csv(RESULTS_DIR / "h3_code_distribution.csv", index=False)
@@ -333,16 +352,16 @@ log("\nCode distribution:")
 log(code_distribution.to_string(index=False))
 
 
-# Figures
+# 7. Create and save figures.
 plt.style.use("seaborn-v0_8-whitegrid")
 
-# Figure 1: number of score-stable and score-changing perturbation cases
+# Figure 1: number of score-stable and score-changing perturbation cases.
 counts = cases["score_changed"].value_counts().reindex([0, 1], fill_value=0)
 fig, ax = plt.subplots(figsize=(7, 5))
 bars = ax.bar(
     ["Score stable vs. baseline", "Score changed vs. baseline\n(Variant 1)"],
     counts.values,
-    color=["#9ecae1", "#08519c"],
+    color=[SCORE_CHANGE_COLORS["stable"], SCORE_CHANGE_COLORS["changed"]],
 )
 ax.bar_label(bars, padding=3, fontweight="bold")
 ax.set_ylabel("Number of perturbation cases")
@@ -351,7 +370,7 @@ fig.tight_layout()
 fig.savefig(FIGURES_DIR / "h3_fig1_case_base.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-# Figure 2: mean case-level alignment share with case-bootstrap 95% CIs
+# Figure 2: mean case-level alignment share with case-bootstrap 95% CIs.
 plot_data = summary.copy()
 plot_data = plot_data.iloc[:2].reset_index(drop=True)
 labels = [
@@ -371,7 +390,7 @@ bars = ax.bar(
     yerr=yerr,
     capsize=6,
     width=0.72,
-    color=["#08519c", "#2c7fb8"],
+    color=[VARIANT_COLORS["V1"], VARIANT_COLORS["V2"]],
     edgecolor="white",
     linewidth=0.8,
     error_kw={
