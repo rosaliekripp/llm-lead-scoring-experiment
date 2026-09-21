@@ -83,8 +83,8 @@ MODEL_COLORS = {
     "apertus": "#55ADD8",
 }
 INPUT_TYPE_COLORS = {
-    "Baseline": "#BAC9D2",
-    "Perturbed": "#57626F",
+    "Baseline": "#BDDDFC",
+    "Perturbed": "#384959",
 }
 H3_CODE_COLORS = {
     0: "#D8B4E2",  # Light purple

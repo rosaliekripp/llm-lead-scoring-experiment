@@ -52,7 +52,7 @@ SCORE_CHANGE_COLORS = {
 }
 VARIANT_COLORS = {
     "V1": "#08519C",
-    "V2": "#9ECAE1",
+    "V2": "#AEB8E8",
 }
 NEUTRAL_COLOR = "#3182bd"
 

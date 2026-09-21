@@ -48,13 +48,9 @@ FIRMOGRAPHIC_FEATURES = {"company_size", "industry", "region"}
 
 # Color system.
 
-FEATURE_TYPE_COLORS = {
-    "Behavioral": "#08519C",
-    "Firmographic": "#9ECAE1",
-}
 OUTCOME_COLORS = {
-    "Lead score": "#093C6F",
-    "Explanation attribution": "#76B5D7",
+    "Lead score": "#6A89A7",
+    "Explanation attribution": "#384959",
 }
 
 
@@ -252,54 +248,17 @@ def create_figure(group_summary):
         x="feature_type",
         y="instability_rate",
         hue="Outcome",
-        palette=["#FFFFFF", "#FFFFFF"],
+        palette=OUTCOME_COLORS,
         saturation=1,
         ax=ax,
     )
 
-    feature_order = ["Behavioral", "Firmographic"]
-    outcome_order = ["Lead score", "Explanation attribution"]
-
-    bar_colors = {
-        ("Behavioral", "Lead score"): FEATURE_TYPE_COLORS["Behavioral"],
-        ("Firmographic", "Lead score"): FEATURE_TYPE_COLORS["Firmographic"],
-        ("Behavioral", "Explanation attribution"): OUTCOME_COLORS["Lead score"],
-        ("Firmographic", "Explanation attribution"):
-            OUTCOME_COLORS["Explanation attribution"],
-    }
-
-    for container, outcome in zip(ax.containers, outcome_order):
-        for bar, feature_type in zip(container, feature_order):
-            bar.set_facecolor(bar_colors[(feature_type, outcome)])
-            bar.set_edgecolor("white")
-            bar.set_linewidth(0.8)
-
+    for container in ax.containers:
         ax.bar_label(
             container,
             labels=[f"{bar.get_height():.1%}" for bar in container],
             padding=3,
         )
-
-    if ax.get_legend() is not None:
-        ax.get_legend().remove()
-
-    feature_legend = [
-        Patch(
-            facecolor=FEATURE_TYPE_COLORS["Behavioral"],
-            edgecolor="white",
-            label="Behavioral",
-        ),
-        Patch(
-            facecolor=FEATURE_TYPE_COLORS["Firmographic"],
-            edgecolor="white",
-            label="Firmographic",
-        ),
-    ]
-
-    ax.legend(
-        handles=feature_legend,
-        title="Feature type",
-    )
 
     maximum = plot_data["instability_rate"].max()
     ax.set_ylim(0, max(0.10, maximum * 1.30))

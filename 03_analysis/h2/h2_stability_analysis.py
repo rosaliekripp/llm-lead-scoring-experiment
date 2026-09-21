@@ -82,7 +82,7 @@ INTENT_COLORS = {
 }
 STABILITY_COLORS = {
     "fully_stable": "#4F8F6B",
-    "partly_stable": "#ECEEFC",
+    "partly_stable": "#AEB8E8",
     "unstable": "#C75B5B",
 }
 NEUTRAL_COLOR = "#AEB8E8"
@@ -484,16 +484,14 @@ def create_figures(
     )
     fig, ax = plt.subplots(figsize=(7, 5))
     colors = [
-        STABILITY_COLORS["fully_stable"],
         STABILITY_COLORS["partly_stable"],
-        STABILITY_COLORS["unstable"],
+        STABILITY_COLORS["partly_stable"],
+        STABILITY_COLORS["partly_stable"],
     ]
     bars = ax.bar(
         split_counts.index,
         split_counts.values,
-        color=colors,
-        edgecolor="#7A7A7A",
-        linewidth=0.8,
+        color=colors
     )
     ax.bar_label(bars, padding=3)
     ax.set_title("Score stability across five identical runs")
